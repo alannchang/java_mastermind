@@ -4,8 +4,25 @@
 ### 8/11
 - Created repo, added Gradle
 - Added support for random number generation using Random.org API and local pseudo random generation as a fallback
+
 ### 8/12
-- 
+- Added class to manage game operations (GameManager)
+- Added logging using slf4j
+- Added QuotaChecker so users can check their random.org API, pulled it from RandomOrgService
+
+### 8/13
+
+### 8/14
+
+### 8/15
+
+### 8/16
+
+### 8/17
+
+### 8/18
+
+### 8/19
 
 ## Checklist
 ### Core Game Requirements
@@ -32,9 +49,12 @@
 
 ### Other
 - [ ] Automated Tests (Unit tests?)
-- [ ] Logging
+- [X] Logging using slf4j
+- [ ] Error & exception handling
+- [ ] Input validation
 
-### Extensions (Optional)
+### Extensions/Extras (Optional)
+- [X] Add ability to check random.org api quota
 - [ ] Add hint system
 - [ ] Add configurable difficulty (number range / attempts)
 - [ ] Add multiplayer mode
