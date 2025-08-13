@@ -24,7 +24,21 @@ public class RandomOrgService implements RandomNumberService {
 
     @Override
     public String generate(int quantity, int min, int max) {
-        logger.debug("Generating {} random numbers using Random.org api.", quantity);
+        logger.debug("Generating {} random numbers from {} to {} using Random.org api.", quantity, min, max);
+
+        if (quantity < 1 || quantity > 10000) {
+            throw new IllegalArgumentException("Quantity must be between 1 and 10000");
+        }
+        if (min < -1_000_000_000 || min > 1_000_000_000) {
+            throw new IllegalArgumentException("Min value must be between -1,000,000,000 and 1,000,000,000, got: " + min);
+        }
+        if (max < -1_000_000_000 || max > 1_000_000_000) {
+            throw new IllegalArgumentException("Max value must be between -1,000,000,000 and 1,000,000,000, got: " + max);
+        }
+        if (min > max) {
+            throw new IllegalArgumentException("Min value (" + min + ") cannot be greater than max value (" + max + ")");
+        }
+
         HttpUrl baseUrl = HttpUrl.parse(randomNumberApi);
 
         HttpUrl url = baseUrl.newBuilder()
