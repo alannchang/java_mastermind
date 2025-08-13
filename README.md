@@ -4,6 +4,8 @@
 ### 8/11
 - Created repo, added Gradle
 - Added support for random number generation using Random.org API and local pseudo random generation as a fallback
+### 8/12
+- 
 
 ## Checklist
 ### Core Game Requirements
