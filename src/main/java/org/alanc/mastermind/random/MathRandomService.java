@@ -10,7 +10,7 @@ public class MathRandomService implements RandomNumberService {
 
     @Override
     public String generate (int quantity, int min, int max) {
-        logger.debug("Generating {} pseudo-random numbers using Math.random()", quantity);
+        logger.debug("Generating {} pseudo-random numbers from {} to {} using Math.random()", quantity, min, max);
 
         StringBuilder pseudoRandomNumbers = new StringBuilder();
         for (int i = 0; i < quantity; i++) {

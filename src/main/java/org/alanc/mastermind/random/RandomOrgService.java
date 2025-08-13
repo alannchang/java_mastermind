@@ -24,7 +24,7 @@ public class RandomOrgService implements RandomNumberService {
 
     @Override
     public String generate(int quantity, int min, int max) {
-        logger.debug("Generating {} random numbers from {} to {} using Random.org api.", quantity, min, max);
+        logger.debug("Generating {} random numbers from {} to {} using random.org api.", quantity, min, max);
 
         if (quantity < 1 || quantity > 10000) {
             throw new IllegalArgumentException("Quantity must be between 1 and 10000");
@@ -66,9 +66,10 @@ public class RandomOrgService implements RandomNumberService {
                     .replaceAll("[\\r\\n]+", " ")  // Replace any line endings with space
                     .replaceAll("\\s+", " ")       // Collapse multiple whitespace to single space
                     .trim();
-            logger.debug("Successfully generated {} random numbers using random.org api", quantity);
+            logger.debug("Successfully generated {} random numbers using random.org api: {}", quantity, formattedRandomNumbers);
             return formattedRandomNumbers;
         } catch (IOException e) {
+            // replace with proper error handling
             System.out.println("Random.org API failed.");
         }
         return null;
