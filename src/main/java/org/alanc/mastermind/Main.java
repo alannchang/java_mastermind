@@ -11,6 +11,6 @@ public class Main {
         logger.info("Starting Mastermind game");
 
         GameManager gameManager = new GameManager();
-        gameManager.start();
+        gameManager.startApplication();
     }
 }

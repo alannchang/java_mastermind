@@ -1,9 +1,6 @@
 package org.alanc.mastermind.manager;
 
-import org.alanc.mastermind.random.MathRandomService;
-import org.alanc.mastermind.random.QuotaChecker;
-import org.alanc.mastermind.random.RandomNumberService;
-import org.alanc.mastermind.random.RandomOrgService;
+import org.alanc.mastermind.logic.GameLogic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,25 +8,14 @@ import org.slf4j.LoggerFactory;
 public class GameManager {
     private static final Logger logger = LoggerFactory.getLogger(GameManager.class);
 
-    public GameManager () {}
+    private final GameLogic gameLogic;
 
-    public void start() {
-        logger.info("Printing random numbers.");
+    public GameManager () {
+        this.gameLogic = new GameLogic();
+    }
 
-        RandomNumberService randomNumberService = new RandomOrgService();
-
-        // RandomOrgService
-        String randomNumbers = randomNumberService.generate(4, 0, 8);
-        System.out.printf("Random.org generated random numbers:\n%s\n", randomNumbers);
-
-        // MathRandomService
-        randomNumberService = new MathRandomService();
-        randomNumbers = randomNumberService.generate(4, 0, 8);
-        System.out.printf("Pseudo random numbers: %s\n", randomNumbers);
-
-        // Quota
-        QuotaChecker quotaChecker = new QuotaChecker();
-        System.out.printf("Quota: %d\n", quotaChecker.getQuota());
+    public void startApplication() {
+        gameLogic.startNewGame();
 
     }
 
