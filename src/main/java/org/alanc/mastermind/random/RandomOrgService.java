@@ -2,26 +2,29 @@ package org.alanc.mastermind.random;
 
 import okhttp3.*;
 import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RandomOrgService implements RandomNumberService {
+    private static final Logger logger = LoggerFactory.getLogger(RandomOrgService.class);
+
     private static final String RANDOM_ORG_API = "https://www.random.org/integers";
-    private static final String QUOTA_API = "https://www.random.org/quota/";
     private static final OkHttpClient client = new OkHttpClient();
 
     private final String randomNumberApi;
-    private final String quotaApi;
 
     public RandomOrgService() {
-        this(RANDOM_ORG_API, QUOTA_API);
+        this(RANDOM_ORG_API);
     }
 
-    public RandomOrgService(String randomNumberApi, String quotaApi) {
+    // for custom API urls if that ever happens
+    public RandomOrgService(String randomNumberApi) {
         this.randomNumberApi = randomNumberApi;
-        this.quotaApi = quotaApi;
     }
 
     @Override
     public String generate(int quantity, int min, int max) {
+        logger.debug("Generating {} random numbers using Random.org api.", quantity);
         HttpUrl baseUrl = HttpUrl.parse(randomNumberApi);
 
         HttpUrl url = baseUrl.newBuilder()
@@ -48,5 +51,4 @@ public class RandomOrgService implements RandomNumberService {
         return null;
 
     }
-
 }

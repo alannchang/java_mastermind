@@ -48,6 +48,12 @@
         <appender-ref ref="ERROR_FILE"/>
     </logger>
 
+    <!-- Specific logger for Random services (file logging only) -->
+    <logger name="org.alanc.mastermind.random" level="DEBUG" additivity="false">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+    </logger>
+
     <!-- Root logger (file logging only, console only for serious errors) -->
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
