@@ -56,9 +56,18 @@ public class RandomOrgService implements RandomNumberService {
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-            if (response.body() != null) {
-                return response.body().string();
+            ResponseBody responseBody = response.body();
+            if (!response.isSuccessful() || responseBody == null) {
+                logger.warn("Error encountered when using random.org api. Response code {}", response.code());
+                return null;
             }
+            String responseString = responseBody.string();
+            String formattedRandomNumbers = responseString
+                    .replaceAll("[\\r\\n]+", " ")  // Replace any line endings with space
+                    .replaceAll("\\s+", " ")       // Collapse multiple whitespace to single space
+                    .trim();
+            logger.debug("Successfully generated {} random numbers using random.org api", quantity);
+            return formattedRandomNumbers;
         } catch (IOException e) {
             System.out.println("Random.org API failed.");
         }
