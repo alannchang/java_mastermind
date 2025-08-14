@@ -1,5 +1,6 @@
 package org.alanc.mastermind.logic;
 
+import org.alanc.mastermind.config.GameConfigDTO;
 import org.alanc.mastermind.random.MathRandomService;
 import org.alanc.mastermind.random.RandomNumberService;
 import org.alanc.mastermind.random.RandomOrgService;
@@ -15,20 +16,48 @@ public final class GameLogic {
         this.randomNumberService = randomNumberService;
     }
 
-    public void startNewGame() {
-        System.out.println("Starting new game!");
-        String code = generateSecretCode(4, 0 , 8);
-        System.out.printf("Secret Code is: %s\n", code);
+    public GameState createNewGame(GameConfigDTO config) {
+        String secretCode = generateSecretCode(config);
+        return GameState.createNew(secretCode, config);
     }
 
-    private String generateSecretCode(int quantity, int min, int max) {
+    public GameState processGuess(GameState currentState, String playerGuess) {
+        // Validate the guess
+        ValidationResult validationResult = GameInputValidator.validateGuess(
+                playerGuess,
+                currentState.getCodeLength(),
+                currentState.getMaxNumber()
+        );
+
+        if (!validationResult.isValid()) {
+            logger.debug("Invalid guess input by user: {}", validationResult.getErrorMessage());
+            throw new IllegalArgumentException(validationResult.getErrorMessage());
+        }
+
+        return currentState.withGuess(validationResult.getNumbers());
+    }
+
+    public boolean isValidGuess(String playerGuess, GameConfigDTO config) {
+        ValidationResult result = GameInputValidator.validateGuess(playerGuess, config.getCodeLength(), config.getMaxNumber());
+        return result.isValid();
+    }
+
+    private String generateSecretCode(GameConfigDTO config) {
         randomNumberService = new RandomOrgService();
-        String code = randomNumberService.generate(quantity, min, max);
+        String code = randomNumberService.generate(
+                config.getCodeLength(),
+                0,
+                config.getMaxNumber()
+        );
 
         // Fallback to Math.random
         if (code == null) {
             randomNumberService = new MathRandomService();
-            code = randomNumberService.generate(quantity, min, max);
+            code = randomNumberService.generate(
+                    config.getCodeLength(),
+                    0,
+                    config.getMaxNumber()
+            );
         }
 
         return code;
