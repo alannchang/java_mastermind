@@ -1,8 +1,9 @@
 plugins {
     id("java")
+    id("application")
 }
 
-group = "org.alanc"
+group = "org.alanc.mastermind"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -21,4 +22,9 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.named<JavaExec>("run") {
+    mainClass.set("org.alanc.mastermind.Main")
+    standardInput = System.`in`
 }

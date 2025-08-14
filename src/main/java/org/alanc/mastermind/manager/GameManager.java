@@ -33,15 +33,16 @@ public class GameManager {
     }
 
     public String readLine(String prompt) {
-         return scanner.nextLine();
+        System.out.print(prompt);
+        return scanner.nextLine();
     }
 
     private void playOneRound(GameState gameState) {
         showWelcomeMessage(gameState.getMaxAttempts(), gameState.getCodeLength(), gameState.getMaxNumber());
 
-        String playerGuess = readLine("What is the secret code? ");
-
         while(!gameState.isGameEnded()) {
+            String playerGuess = readLine("What is the secret code? ");
+
             try {
                 gameState = gameLogic.processGuess(gameState, playerGuess);
 

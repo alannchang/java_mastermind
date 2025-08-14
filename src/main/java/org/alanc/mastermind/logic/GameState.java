@@ -101,8 +101,8 @@ public final class GameState {
 
     private int countTotalCorrectNumbers(int[] secret, int[] currentGuess, int correctLocations) {
         // Use frequency maps to count correct numbers in wrong locations
-        int[] secretFrequency = new int[codeLength];
-        int[] guessFrequency = new int[codeLength];
+        int[] secretFrequency = new int[maxNumber + 1];
+        int[] guessFrequency = new int[maxNumber + 1];
 
         // Count frequencies excluding exact matches
         for (int i = 0; i < secret.length; i++) {
