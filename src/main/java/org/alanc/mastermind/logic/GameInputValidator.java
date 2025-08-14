@@ -2,7 +2,7 @@ package org.alanc.mastermind.logic;
 
 public class GameInputValidator {
 
-    public static ValidationResult validGuess(String playerGuess, int expectedLength, int maxValue) {
+    public static ValidationResult validateGuess(String playerGuess, int expectedLength, int maxValue) {
         if (playerGuess == null || playerGuess.trim().isEmpty()) {
             return ValidationResult.failure("Please enter your guess.");
         }
