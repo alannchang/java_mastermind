@@ -8,7 +8,7 @@ public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-        logger.info("Starting Mastermind game");
+        logger.info("Application ENTRYPOINT");
 
         GameManager gameManager = new GameManager();
         gameManager.startApplication();

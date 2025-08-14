@@ -5,7 +5,8 @@ public class GameConfigDTO {
     private int codeLength;
     private int maxNumber;
 
-    private GameConfigDTO (int maxAttempts, int codeLength, int maxNumber) {
+
+    public GameConfigDTO (int maxAttempts, int codeLength, int maxNumber) {
         this.maxAttempts = maxAttempts;
         this.codeLength = codeLength;
         this.maxNumber = maxNumber;

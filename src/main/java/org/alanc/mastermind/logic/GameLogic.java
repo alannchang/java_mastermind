@@ -1,6 +1,5 @@
 package org.alanc.mastermind.logic;
 
-import org.alanc.mastermind.manager.GameManager;
 import org.alanc.mastermind.random.MathRandomService;
 import org.alanc.mastermind.random.RandomNumberService;
 import org.alanc.mastermind.random.RandomOrgService;
@@ -12,7 +11,9 @@ public final class GameLogic {
 
     private RandomNumberService randomNumberService;
 
-    public GameLogic() {}
+    public GameLogic(RandomNumberService randomNumberService) {
+        this.randomNumberService = randomNumberService;
+    }
 
     public void startNewGame() {
         System.out.println("Starting new game!");
@@ -21,7 +22,7 @@ public final class GameLogic {
     }
 
     private String generateSecretCode(int quantity, int min, int max) {
-        RandomNumberService randomNumberService = new RandomOrgService();
+        randomNumberService = new RandomOrgService();
         String code = randomNumberService.generate(quantity, min, max);
 
         // Fallback to Math.random
