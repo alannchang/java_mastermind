@@ -2,24 +2,31 @@ package org.alanc.mastermind.logic;
 
 public class GameInputValidator {
 
-    public static int[] validGuess(String playerGuess, int expectedLength, int maxValue) {
+    public static ValidationResult validGuess(String playerGuess, int expectedLength, int maxValue) {
         if (playerGuess == null || playerGuess.trim().isEmpty()) {
-            return new int[0];
+            return ValidationResult.failure("Please enter your guess.");
         }
 
         String[] parts = playerGuess.trim().split("\\s+");
 
         if (parts.length != expectedLength) {
-            return new int[0];
+            return ValidationResult.failure(String.format("Guess must consist of %d numbers.", expectedLength));
         }
 
         int[] numbers = new int[expectedLength];
 
         for (int i = 0; i < parts.length; i++) {
-            int number = Integer.parseInt(parts[i]);
-            numbers[i] = number;
+            try {
+                int number = Integer.parseInt(parts[i]);
+                if (number < 0 || number > maxValue) {
+                    return ValidationResult.failure(String.format("Numbers must be between 0 and %d.", maxValue));
+                }
+                numbers[i] = number;
+            } catch (NumberFormatException e) {
+                return ValidationResult.failure(String.format("'%s' is not a valid number.", parts[i]));
+            }
         }
-        return numbers;
+        return ValidationResult.success(numbers);
     }
 
     public static String intArrayToString(int[] numbers) {
