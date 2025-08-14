@@ -12,6 +12,10 @@ public class GameConfigDTO {
         this.maxNumber = maxNumber;
     }
 
+    public GameConfigDTO() {
+        this(10, 4, 8);
+    }
+
     // Getters
     public int getMaxAttempts() { return maxAttempts; }
     public int getCodeLength() { return codeLength; }

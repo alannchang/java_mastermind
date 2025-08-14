@@ -2,9 +2,15 @@ package org.alanc.mastermind.logic;
 
 import org.alanc.mastermind.config.GameConfigDTO;
 
+import java.sql.Array;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+
 public final class GameState {
     private final String secretCode;
     private final int[] playerGuess;
+    private final List<GuessResult> guessHistory;
     private final int attemptsRemaining;
     private final int maxAttempts;
     private final int codeLength;
@@ -12,10 +18,11 @@ public final class GameState {
     private final boolean gameEnded;
     private final boolean playerWon;
 
-    private GameState(String secretCode, int[] playerGuess, int attemptsRemaining, int maxAttempts, int codeLength,
-                      int maxNumber, boolean gameEnded, boolean playerWon) {
+    private GameState(String secretCode, int[] playerGuess, List<GuessResult> guessHistory,int attemptsRemaining,
+                      int maxAttempts, int codeLength, int maxNumber, boolean gameEnded, boolean playerWon) {
         this.secretCode = secretCode;
-        this.playerGuess = playerGuess;
+        this.playerGuess = playerGuess.clone();
+        this.guessHistory = new ArrayList<>(guessHistory);
         this.attemptsRemaining = attemptsRemaining;
         this.maxAttempts = maxAttempts;
         this.codeLength = codeLength;
@@ -34,6 +41,7 @@ public final class GameState {
         return new GameState(
                 secretCode,
                 validationResult.getNumbers(),
+                Collections.emptyList(),
                 config.getMaxAttempts(),
                 config.getMaxAttempts(),
                 config.getCodeLength(),
@@ -49,6 +57,8 @@ public final class GameState {
         }
 
         GuessResult result = evaluateGuess(guessNumbers);
+        List<GuessResult> newHistory = new ArrayList<>(guessHistory);
+        newHistory.add(result);
 
         int newAttemptsRemaining = attemptsRemaining - 1;
         boolean won = result.isAllCorrect();
@@ -57,6 +67,7 @@ public final class GameState {
         return new GameState(
                 secretCode,
                 playerGuess,
+                newHistory,
                 newAttemptsRemaining,
                 maxAttempts,
                 codeLength,
@@ -113,6 +124,7 @@ public final class GameState {
     // Getters
     public String getSecretCode() { return secretCode; }
     public int[] getPlayerGuess() { return playerGuess.clone(); }
+    public List<GuessResult> getGuessHistory() { return Collections.unmodifiableList(guessHistory); }
     public int getAttemptsRemaining() { return attemptsRemaining; }
     public int getMaxAttempts() { return maxAttempts; }
     public int getCodeLength() { return codeLength; }
