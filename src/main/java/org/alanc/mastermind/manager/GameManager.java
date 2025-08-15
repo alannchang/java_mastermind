@@ -8,6 +8,7 @@ import org.alanc.mastermind.random.RandomOrgService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Scanner;
+import org.alanc.mastermind.util.Utils;
 
 
 public class GameManager {
@@ -32,16 +33,11 @@ public class GameManager {
         playOneRound(gameState);
     }
 
-    public String readLine(String prompt) {
-        System.out.print(prompt);
-        return scanner.nextLine();
-    }
-
     private void playOneRound(GameState gameState) {
         showWelcomeMessage(gameState.getMaxAttempts(), gameState.getCodeLength(), gameState.getMaxNumber());
 
         while(!gameState.isGameEnded()) {
-            String playerGuess = readLine("What is the secret code? ");
+            String playerGuess = Utils.readLine(scanner, "What is the secret code? ");
 
             try {
                 gameState = gameLogic.processGuess(gameState, playerGuess);
