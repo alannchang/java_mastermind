@@ -1,8 +1,6 @@
 package org.alanc.mastermind.logic;
 
 import org.alanc.mastermind.config.GameConfigDTO;
-
-import java.sql.Array;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
