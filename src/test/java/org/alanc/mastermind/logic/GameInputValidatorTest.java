@@ -159,15 +159,47 @@ class GameInputValidatorTest {
 
 
     @Nested
-    @DisplayName("formatGuess() tests")
-    class FormatGuessTests {
+    @DisplayName("intArrayToString() tests")
+    class intArraytoStringTests {
 
         @Test
         @DisplayName("Should format single digit array correctly")
-        void testFormatSingleDigits() {
+        void testSingleDigitArray() {
             String result = GameInputValidator.intArrayToString(new int[]{1, 2, 3, 4});
 
             assertEquals("1 2 3 4", result);
+        }
+
+        @Test
+        @DisplayName("Should format empty array correctly")
+        void testEmptyArray() {
+            String result = GameInputValidator.intArrayToString(new int[0]);
+
+            assertEquals("", result);
+        }
+
+        @Test
+        @DisplayName("Should format single element array correctly")
+        void testSingleElementArray() {
+            String result = GameInputValidator.intArrayToString(new int[]{1});
+
+            assertEquals("1", result);
+        }
+
+        @Test
+        @DisplayName("Should format array with zeros correctly")
+        void testArrayWithZeros() {
+            String result = GameInputValidator.intArrayToString(new int[]{0, 0, 0, 1});
+
+            assertEquals("0 0 0 1", result);
+        }
+
+        @Test
+        @DisplayName("Should format larger numbers correctly")
+        void testArrayWithLargeNumbers() {
+            String result = GameInputValidator.intArrayToString(new int[]{10, 99, 50});
+
+            assertEquals("10 99 50", result);
         }
     }
 }
