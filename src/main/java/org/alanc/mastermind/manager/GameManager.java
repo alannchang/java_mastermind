@@ -5,6 +5,7 @@ import org.alanc.mastermind.logic.GameLogic;
 import org.alanc.mastermind.logic.GameState;
 import org.alanc.mastermind.random.RandomNumberService;
 import org.alanc.mastermind.random.RandomOrgService;
+import org.alanc.mastermind.random.QuotaChecker;
 import org.alanc.mastermind.util.ErrorHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,14 +70,38 @@ public class GameManager implements AutoCloseable{
     @Override
     public void close() {
         logger.debug("Closing GameManager resources");
+        
+        closeScanner();
+        closeRandomOrgService();
+        closeQuotaChecker();
+    }
 
+    private void closeScanner() {
         try {
             if (scanner != null) {
                 scanner.close();
-                logger.debug("Scanner closed successfully");
+                logger.debug("input scanner closed successfully");
             }
         } catch (Exception e) {
             ErrorHandler.handleResourceError(logger, "input scanner", e, false);
+        }
+    }
+
+    private void closeRandomOrgService() {
+        try {
+            RandomOrgService.shutdown();
+            logger.debug("RandomOrgService HTTP client closed successfully");
+        } catch (Exception e) {
+            ErrorHandler.handleResourceError(logger, "RandomOrgService HTTP client", e, false);
+        }
+    }
+
+    private void closeQuotaChecker() {
+        try {
+            QuotaChecker.shutdown();
+            logger.debug("QuotaChecker HTTP client closed successfully");
+        } catch (Exception e) {
+            ErrorHandler.handleResourceError(logger, "QuotaChecker HTTP client", e, false);
         }
     }
 

@@ -23,9 +23,11 @@
 
 ### 8/15
 - Added more tests (MathRandomService, RandomOrgService, etc.)
-- 
+- Added ErrorHandling for customizable error messages
 
 ### 8/16
+- Added proper resource management using try-with-resources 
+- Application handles Ctrl+D
 
 ### 8/17
 
@@ -57,10 +59,11 @@
 - [X] Parse API response into the secret combination
 
 ### Other
-- [ ] Automated tests, unit tests, etc.   (IN PROGRESS)
+- [X] Automated tests, unit tests, etc.   (IN PROGRESS)
 - [X] Logging using slf4j   (IN PROGRESS)
-- [ ] Error & exception handling   (IN PROGRESS)
+- [X] Error & exception handling   (IN PROGRESS)
 - [X] Input validation
+- [X] Proper resource management
 
 ### Extensions/Extras (Optional)
 - [X] Add ability to check random.org api quota

@@ -74,6 +74,11 @@ public class RandomOrgService implements RandomNumberService {
             ErrorHandler.handleNetworkError(logger, "Random.org API", e, true);
         }
         return null;
+    }
 
+    public static void shutdown() {
+        logger.debug("Shutting down RandomOrgService HTTP client");
+        client.dispatcher().executorService().shutdown();
+        client.connectionPool().evictAll();
     }
 }

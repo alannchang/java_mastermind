@@ -41,7 +41,7 @@ public class QuotaChecker {
                 .url(url)
                 .build();
 
-        try (Response response = client.newCall(new Request.Builder().url(url).build()).execute()) {
+        try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful() || response.body() == null) {
                 logger.warn("Error encountered when retrieving quota from random.org. Response code: {}", response.code());
                 return -1;
@@ -57,5 +57,11 @@ public class QuotaChecker {
                     new RuntimeException("Invalid response format: " + e.getMessage(), e), false);
             return -1;
         }
+    }
+
+    public static void shutdown() {
+        logger.debug("Shutting down QuotaChecker HTTP client");
+        client.dispatcher().executorService().shutdown();
+        client.connectionPool().evictAll();
     }
 }
