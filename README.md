@@ -22,6 +22,8 @@
 - Added JUnit5 tests
 
 ### 8/15
+- Added more tests (MathRandomService, RandomOrgService, etc.)
+- 
 
 ### 8/16
 

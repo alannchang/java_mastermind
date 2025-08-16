@@ -58,7 +58,7 @@ public class RandomOrgService implements RandomNumberService {
         try (Response response = client.newCall(request).execute()) {
             ResponseBody responseBody = response.body();
             if (!response.isSuccessful() || responseBody == null) {
-                logger.warn("Error encountered when using random.org api. Response code {}", response.code());
+                logger.warn("Error encountered when generating numbers using random.org api. Response code {}", response.code());
                 return null;
             }
             String responseString = responseBody.string();
@@ -69,8 +69,8 @@ public class RandomOrgService implements RandomNumberService {
             logger.debug("Successfully generated {} random numbers using random.org api: {}", quantity, formattedRandomNumbers);
             return formattedRandomNumbers;
         } catch (IOException e) {
-            // replace with proper error handling
-            System.out.println("Random.org API failed.");
+            // TODO: replace with proper error handling
+            System.err.println("Random.org API failed.");
         }
         return null;
 

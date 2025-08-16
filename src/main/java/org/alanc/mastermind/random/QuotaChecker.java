@@ -29,6 +29,7 @@ public class QuotaChecker {
     public int getQuota() {
         logger.debug("Checking random.org API quota");
         HttpUrl baseUrl = HttpUrl.parse(quotaApi);
+        if (baseUrl == null) throw new IllegalStateException("Invalid quotaApi URL: " + quotaApi);
 
         HttpUrl url = baseUrl.newBuilder()
                 .addQueryParameter("getusage", "true")
@@ -39,15 +40,22 @@ public class QuotaChecker {
                 .url(url)
                 .build();
 
-        try (Response response = client.newCall(request).execute()) {
-            if (response.body() != null) {
-                int quota = Integer.parseInt(response.body().string());
-                logger.debug("Current random.org quota: {} bits", quota);
-                return quota;
+        try (Response response = client.newCall(new Request.Builder().url(url).build()).execute()) {
+            if (!response.isSuccessful() || response.body() == null) {
+                logger.warn("Error encountered when retrieving quota from random.org. Response code: {}", response.code());
+                return -1;
             }
+            int quota = Integer.parseInt(response.body().string().trim());
+            logger.debug("Retrieved current random.org quota: {} bits", quota);
+            return quota;
         } catch (IOException e) {
-            System.out.println("Random.org API failed.");
+            // TODO: replace with proper error handling
+            System.err.println("Random.org quota API failed.");
+            return -1;
+        } catch (NumberFormatException e) {
+            // TODO: replace with proper error handling
+            System.err.println("Invalid response format received.");
+            return -1;
         }
-        return -1;
     }
 }
