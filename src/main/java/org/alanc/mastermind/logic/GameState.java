@@ -124,6 +124,7 @@ public final class GameState {
     public int[] getPlayerGuess() { return playerGuess.clone(); }
     public List<GuessResult> getGuessHistory() { return Collections.unmodifiableList(guessHistory); }
     public int getAttemptsRemaining() { return attemptsRemaining; }
+    public int getAttemptsMade() { return maxAttempts - attemptsRemaining; }
     public int getMaxAttempts() { return maxAttempts; }
     public int getCodeLength() { return codeLength; }
     public int getMaxNumber() { return maxNumber; }
@@ -149,7 +150,7 @@ public final class GameState {
         public int getCorrectLocations() { return correctLocations; }
         public boolean isAllCorrect() { return allCorrect; }
 
-        public String formatFeedback() {
+        public String provideFeedback() {
             if (allCorrect) {
                 return "You guessed all the numbers correctly!";
             }

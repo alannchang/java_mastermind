@@ -47,7 +47,7 @@ public class GameManager {
                     GameState.GuessResult latestGuess =
                             gameState.getGuessHistory().get(gameState.getGuessHistory().size() - 1);
                     if (!latestGuess.isAllCorrect()) {
-                        System.out.println(latestGuess.formatFeedback());
+                        System.out.println(latestGuess.provideFeedback());
                         System.out.printf("Attempts Remaining: %d\n", gameState.getAttemptsRemaining());
                     }
                 }
