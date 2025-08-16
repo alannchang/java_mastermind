@@ -5,6 +5,7 @@ import org.alanc.mastermind.logic.GameLogic;
 import org.alanc.mastermind.logic.GameState;
 import org.alanc.mastermind.random.RandomNumberService;
 import org.alanc.mastermind.random.RandomOrgService;
+import org.alanc.mastermind.util.ErrorHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Scanner;
@@ -52,7 +53,7 @@ public class GameManager {
                     }
                 }
             } catch (IllegalArgumentException e) {
-                // error handle here
+                ErrorHandler.handleInputValidationError(logger, playerGuess, e.getMessage());
             }
         }
     }

@@ -4,6 +4,7 @@ import org.alanc.mastermind.config.GameConfigDTO;
 import org.alanc.mastermind.random.MathRandomService;
 import org.alanc.mastermind.random.RandomNumberService;
 import org.alanc.mastermind.random.RandomOrgService;
+import org.alanc.mastermind.util.ErrorHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +23,15 @@ public final class GameLogic {
     }
 
     public GameState processGuess(GameState currentState, String playerGuess) {
-        // Validate the guess
+        if (currentState.isGameEnded()) {
+            String gameStatus = currentState.hasPlayerWon() ? "won" : "lost";
+            throw ErrorHandler.invalidGameState(
+                    "process guess",
+                    "game " + gameStatus,
+                    "active game"
+            );
+        }
+
         ValidationResult validationResult = GameInputValidator.validateGuess(
                 playerGuess,
                 currentState.getCodeLength(),

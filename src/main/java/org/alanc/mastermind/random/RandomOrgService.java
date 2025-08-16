@@ -2,6 +2,8 @@ package org.alanc.mastermind.random;
 
 import okhttp3.*;
 import java.io.IOException;
+
+import org.alanc.mastermind.util.ErrorHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,8 +71,7 @@ public class RandomOrgService implements RandomNumberService {
             logger.debug("Successfully generated {} random numbers using random.org api: {}", quantity, formattedRandomNumbers);
             return formattedRandomNumbers;
         } catch (IOException e) {
-            // TODO: replace with proper error handling
-            System.err.println("Random.org API failed.");
+            ErrorHandler.handleNetworkError(logger, "Random.org API", e, true);
         }
         return null;
 

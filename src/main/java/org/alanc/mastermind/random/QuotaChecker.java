@@ -4,6 +4,7 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.alanc.mastermind.util.ErrorHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,12 +50,11 @@ public class QuotaChecker {
             logger.debug("Retrieved current random.org quota: {} bits", quota);
             return quota;
         } catch (IOException e) {
-            // TODO: replace with proper error handling
-            System.err.println("Random.org quota API failed.");
+            ErrorHandler.handleNetworkError(logger, "Random.org quota API", e, true);
             return -1;
         } catch (NumberFormatException e) {
-            // TODO: replace with proper error handling
-            System.err.println("Invalid response format received.");
+            ErrorHandler.handleNetworkError(logger, "Random.org quota API",
+                    new RuntimeException("Invalid response format: " + e.getMessage(), e), false);
             return -1;
         }
     }
