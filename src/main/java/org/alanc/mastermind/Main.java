@@ -10,11 +10,10 @@ public class Main {
     public static void main(String[] args) {
         logger.info("Starting application");
 
-        // handle Ctrl+C
+        // handle Ctrl+D
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             logger.info("Shutdown hook triggered - application terminating gracefully");
             System.out.println("Closing application -- Goodbye!");
-            System.out.flush(); // Ensure message is displayed before JVM exits
         }));
 
         try (GameManager gameManager = new GameManager()) {

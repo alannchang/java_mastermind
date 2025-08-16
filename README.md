@@ -1,5 +1,8 @@
 # Mastermind
 
+
+
+
 ## Journal
 ### 8/11
 - Created repo, added Gradle
@@ -22,7 +25,8 @@
 - Added JUnit5 tests
 
 ### 8/15
-- Added more tests (MathRandomService, RandomOrgService, etc.)
+- Added more tests
+- Added mock tests for Http-based services (QuotaChecker, RandomOrgService)
 - Added ErrorHandling for customizable error messages
 
 ### 8/16

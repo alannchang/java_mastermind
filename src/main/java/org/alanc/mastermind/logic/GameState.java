@@ -59,7 +59,7 @@ public final class GameState {
         newHistory.add(result);
 
         int newAttemptsRemaining = attemptsRemaining - 1;
-        boolean won = result.isAllCorrect();
+        boolean won = result.allCorrect();
         boolean ended = won || newAttemptsRemaining <= 0;
 
         return new GameState(
@@ -131,42 +131,22 @@ public final class GameState {
     public boolean isGameEnded() { return gameEnded; }
     public boolean hasPlayerWon() { return playerWon; }
 
-    public static final class GuessResult {
-        private final String guess;
-        private final int correctNumbers;
-        private final int correctLocations;
-        private final boolean allCorrect;
-
-        public GuessResult(String guess, int correctNumbers, int correctLocations, boolean allCorrect) {
-            this.guess = guess;
-            this.correctNumbers = correctNumbers;
-            this.correctLocations = correctLocations;
-            this.allCorrect = allCorrect;
-        }
-
-        // Getters
-        public String getGuess() { return guess;}
-        public int getCorrectNumbers() { return correctNumbers; }
-        public int getCorrectLocations() { return correctLocations; }
-        public boolean isAllCorrect() { return allCorrect; }
+    public record GuessResult(String guess, int correctNumbers, int correctLocations, boolean allCorrect) {
 
         public String provideFeedback() {
-            if (allCorrect) {
-                return "You guessed all the numbers correctly!";
-            }
-            if (correctNumbers == 0) {
-                return "All incorrect.";
-            }
-            return String.format("%d correct number%s and %d correct location%s.",
-                    correctNumbers,
-                    correctNumbers == 1 ? "" : "s",
-                    correctLocations,
-                    correctLocations == 1 ? "" : "s"
-            );
+                if (allCorrect) {
+                    return "You guessed all the numbers correctly!";
+                }
+                if (correctNumbers == 0) {
+                    return "All incorrect.";
+                }
+                return String.format("%d correct number%s and %d correct location%s.",
+                        correctNumbers,
+                        correctNumbers == 1 ? "" : "s",
+                        correctLocations,
+                        correctLocations == 1 ? "" : "s"
+                );
+
         }
-
     }
-
-
-
 }

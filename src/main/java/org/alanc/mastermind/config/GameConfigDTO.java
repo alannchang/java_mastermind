@@ -32,7 +32,7 @@ public class GameConfigDTO {
         this.maxNumber = builder.maxNumber;
     }
 
-    // Builder used for default and
+    // Builder
     public static class Builder {
         private int maxAttempts = 10; // Defaults
         private int codeLength = 4;

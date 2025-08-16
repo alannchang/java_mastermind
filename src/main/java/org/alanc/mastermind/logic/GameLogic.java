@@ -3,7 +3,6 @@ package org.alanc.mastermind.logic;
 import org.alanc.mastermind.config.GameConfigDTO;
 import org.alanc.mastermind.random.MathRandomService;
 import org.alanc.mastermind.random.RandomNumberService;
-import org.alanc.mastermind.random.RandomOrgService;
 import org.alanc.mastermind.util.ErrorHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +10,7 @@ import org.slf4j.LoggerFactory;
 public final class GameLogic {
     private static final Logger logger = LoggerFactory.getLogger(GameLogic.class);
 
-    private RandomNumberService randomNumberService;
+    private final RandomNumberService randomNumberService;
 
     public GameLogic(RandomNumberService randomNumberService) {
         this.randomNumberService = randomNumberService;
@@ -52,17 +51,17 @@ public final class GameLogic {
     }
 
     private String generateSecretCode(GameConfigDTO config) {
-        randomNumberService = new RandomOrgService();
+        // Try the injected service first
         String code = randomNumberService.generate(
                 config.getCodeLength(),
                 0,
                 config.getMaxNumber()
         );
 
-        // Fallback to Math.random
+        // Fallback to Math.random if injected service fails
         if (code == null) {
-            randomNumberService = new MathRandomService();
-            code = randomNumberService.generate(
+            RandomNumberService fallbackService = new MathRandomService();
+            code = fallbackService.generate(
                     config.getCodeLength(),
                     0,
                     config.getMaxNumber()

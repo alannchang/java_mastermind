@@ -94,10 +94,10 @@ class GameStateTest {
             assertEquals(9, newState.getAttemptsRemaining());
 
             GameState.GuessResult result = newState.getGuessHistory().get(0);
-            assertTrue(result.isAllCorrect());
-            assertEquals(4, result.getCorrectNumbers());
-            assertEquals(4, result.getCorrectLocations());
-            assertEquals("1 2 3 4", result.getGuess());
+            assertTrue(result.allCorrect());
+            assertEquals(4, result.correctNumbers());
+            assertEquals(4, result.correctLocations());
+            assertEquals("1 2 3 4", result.guess());
         }
 
         @Test
@@ -112,9 +112,9 @@ class GameStateTest {
             assertEquals(9, newState.getAttemptsRemaining());
 
             GameState.GuessResult result = newState.getGuessHistory().get(0);
-            assertFalse(result.isAllCorrect());
-            assertEquals(2, result.getCorrectNumbers());
-            assertEquals(2, result.getCorrectLocations());
+            assertFalse(result.allCorrect());
+            assertEquals(2, result.correctNumbers());
+            assertEquals(2, result.correctLocations());
         }
 
         @Test
@@ -127,9 +127,9 @@ class GameStateTest {
             assertFalse(newState.hasPlayerWon());
 
             GameState.GuessResult result = newState.getGuessHistory().get(0);
-            assertFalse(result.isAllCorrect());
-            assertEquals(0, result.getCorrectNumbers());
-            assertEquals(0, result.getCorrectLocations());
+            assertFalse(result.allCorrect());
+            assertEquals(0, result.correctNumbers());
+            assertEquals(0, result.correctLocations());
         }
 
         @Test
@@ -139,9 +139,9 @@ class GameStateTest {
             GameState newState = initialState.withGuess(new int[]{4, 3, 2, 1});
 
             GameState.GuessResult result = newState.getGuessHistory().get(0);
-            assertFalse(result.isAllCorrect());
-            assertEquals(4, result.getCorrectNumbers()); // All numbers are in secret
-            assertEquals(0, result.getCorrectLocations()); // None in correct position
+            assertFalse(result.allCorrect());
+            assertEquals(4, result.correctNumbers()); // All numbers are in secret
+            assertEquals(0, result.correctLocations()); // None in correct position
         }
 
         @Test
@@ -151,9 +151,9 @@ class GameStateTest {
             GameState newState = initialState.withGuess(new int[]{1, 1, 1, 1});
 
             GameState.GuessResult result = newState.getGuessHistory().get(0);
-            assertFalse(result.isAllCorrect());
-            assertEquals(1, result.getCorrectNumbers()); // Only one 1 in secret
-            assertEquals(1, result.getCorrectLocations()); // Only position 0 matches
+            assertFalse(result.allCorrect());
+            assertEquals(1, result.correctNumbers()); // Only one 1 in secret
+            assertEquals(1, result.correctLocations()); // Only position 0 matches
         }
 
         @Test
@@ -201,8 +201,8 @@ class GameStateTest {
             GameState newState = initialState.withGuess(new int[]{1, 3, 2, 4});
 
             GameState.GuessResult result = newState.getGuessHistory().get(0);
-            assertEquals(4, result.getCorrectNumbers()); // All numbers exist in secret
-            assertEquals(2, result.getCorrectLocations()); // Positions 0 and 3 correct
+            assertEquals(4, result.correctNumbers()); // All numbers exist in secret
+            assertEquals(2, result.correctLocations()); // Positions 0 and 3 correct
         }
 
         @Test
@@ -216,8 +216,8 @@ class GameStateTest {
             GameState newState = stateWithRepeats.withGuess(new int[]{1, 2, 1, 2});
 
             GameState.GuessResult result = newState.getGuessHistory().get(0);
-            assertEquals(4, result.getCorrectNumbers()); // All numbers exist in secret
-            assertEquals(2, result.getCorrectLocations()); // Positions 0 and 3 are correct
+            assertEquals(4, result.correctNumbers()); // All numbers exist in secret
+            assertEquals(2, result.correctLocations()); // Positions 0 and 3 are correct
         }
 
         @Test
@@ -229,8 +229,8 @@ class GameStateTest {
             GameState newState = sameNumberState.withGuess(new int[]{2, 2, 5, 5});
 
             GameState.GuessResult result = newState.getGuessHistory().get(0);
-            assertEquals(2, result.getCorrectNumbers()); // Only 2 correct numbers (not 4)
-            assertEquals(2, result.getCorrectLocations()); // Positions 0 and 1
+            assertEquals(2, result.correctNumbers()); // Only 2 correct numbers (not 4)
+            assertEquals(2, result.correctLocations()); // Positions 0 and 1
         }
     }
 
@@ -274,10 +274,10 @@ class GameStateTest {
         void testGuessResultProperties() {
             GameState.GuessResult result = new GameState.GuessResult("1 2 3 5", 3, 3, false);
 
-            assertEquals("1 2 3 5", result.getGuess());
-            assertEquals(3, result.getCorrectNumbers());
-            assertEquals(3, result.getCorrectLocations());
-            assertFalse(result.isAllCorrect());
+            assertEquals("1 2 3 5", result.guess());
+            assertEquals(3, result.correctNumbers());
+            assertEquals(3, result.correctLocations());
+            assertFalse(result.allCorrect());
         }
     }
 
@@ -306,9 +306,9 @@ class GameStateTest {
             state = state.withGuess(new int[]{1, 2, 3, 5});
 
             assertEquals(3, state.getGuessHistory().size());
-            assertEquals("3 4 5 6", state.getGuessHistory().get(0).getGuess());
-            assertEquals("1 2 5 6", state.getGuessHistory().get(1).getGuess());
-            assertEquals("1 2 3 5", state.getGuessHistory().get(2).getGuess());
+            assertEquals("3 4 5 6", state.getGuessHistory().get(0).guess());
+            assertEquals("1 2 5 6", state.getGuessHistory().get(1).guess());
+            assertEquals("1 2 3 5", state.getGuessHistory().get(2).guess());
         }
 
         @Test
