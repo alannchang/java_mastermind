@@ -72,6 +72,21 @@ public final class ErrorHandler {
         return new IllegalStateException(message);
     }
 
+    public static void handleResourceError(Logger logger, String resource, Exception cause, boolean isCritical) {
+        String message = createMessage(
+                "manage " + resource,
+                cause.getMessage(),
+                "resource management",
+                null
+        );
+
+        if (isCritical) {
+            logger.error("Critical resource error: {}", message, cause);
+        } else {
+            logger.warn("Resource error (non-critical): {}", message);
+        }
+    }
+
     // Private constructor to prevent instantiation
     private ErrorHandler() {
         throw new UnsupportedOperationException("Utility class cannot be instantiated");

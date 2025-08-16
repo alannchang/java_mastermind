@@ -8,9 +8,15 @@ public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-        logger.info("Application ENTRYPOINT");
+        logger.info("Starting application");
 
-        GameManager gameManager = new GameManager();
-        gameManager.startApplication();
+        try (GameManager gameManager = new GameManager()) {
+            gameManager.startApplication();
+        } catch (Exception e) {
+            logger.error("An unexpected error occurred during application execution", e);
+            System.err.println("An error occurred: " + e.getMessage());
+        }
+
+        logger.info("Mastermind application terminated");
     }
 }

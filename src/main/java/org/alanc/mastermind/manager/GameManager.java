@@ -12,7 +12,7 @@ import java.util.Scanner;
 import org.alanc.mastermind.util.Utils;
 
 
-public class GameManager {
+public class GameManager implements AutoCloseable{
     private static final Logger logger = LoggerFactory.getLogger(GameManager.class);
 
     private final GameLogic gameLogic;
@@ -66,5 +66,18 @@ public class GameManager {
         System.out.println("When entering your guess, please separate each integer with a single space.");
     }
 
+    @Override
+    public void close() {
+        logger.debug("Closing GameManager resources");
+
+        try {
+            if (scanner != null) {
+                scanner.close();
+                logger.debug("Scanner closed successfully");
+            }
+        } catch (Exception e) {
+            ErrorHandler.handleResourceError(logger, "input scanner", e, false);
+        }
+    }
 
 }
