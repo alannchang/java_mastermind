@@ -13,25 +13,6 @@ public class GameUI {
         MainMenuUI.show(scanner, gameManager);
     }
 
-    public static void showOptionsMenu(Scanner scanner, GameManager gameManager) {
-        OptionsMenuUI.show(scanner, gameManager);
-    }
-
-    public static void showAbout(Scanner scanner, GameManager gameManager) {
-        AboutUI.show(scanner);
-    }
-
-    public static void showGameResult(boolean playerWon) {
-        if (playerWon) {
-            logger.info("Displaying victory banner");
-            printUI(Messages.YOU_WIN_BANNER);
-        } else {
-            logger.info("Displaying defeat banner");
-            printUI(Messages.YOU_LOSE_BANNER);
-        }
-        printUI(Messages.SEPARATOR);
-    }
-
     public static boolean showEndGameMenu(Scanner scanner) {
         return EndgameUI.show(scanner);
     }

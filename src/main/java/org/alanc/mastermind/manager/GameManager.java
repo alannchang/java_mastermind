@@ -22,7 +22,6 @@ public class GameManager implements AutoCloseable{
     private RandomNumberService randomNumberService;
     private GameConfig currentConfig;
 
-
     public GameManager () {
         logger.info("Initializing GameManager");
 
@@ -37,11 +36,11 @@ public class GameManager implements AutoCloseable{
                 currentConfig.getMaxAttempts(), currentConfig.getCodeLength(), currentConfig.getMaxNumber());
     }
 
-    public void start() {
+    public void launch() {
         GameUI.showMainMenu(scanner, this);
     }
 
-    public GameConfig getConfig() {
+    public GameConfig getCurrentConfig() {
         return currentConfig;
     }
 
@@ -82,7 +81,7 @@ public class GameManager implements AutoCloseable{
                             gameState.getGuessHistory().get(gameState.getGuessHistory().size() - 1);
                     if (!latestGuess.allCorrect()) {
                         System.out.println(latestGuess.provideFeedback());
-                        System.out.printf("Attempts Remaining: %d\n", gameState.getAttemptsRemaining());
+                        System.out.printf("Try Again. Attempts Remaining: %d\n", gameState.getAttemptsRemaining());
                     }
                 }
             } catch (IllegalArgumentException e) {

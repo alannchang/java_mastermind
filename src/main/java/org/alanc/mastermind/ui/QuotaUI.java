@@ -39,7 +39,7 @@ public class QuotaUI {
         System.out.println("For more information, visit https://www.random.org/quota/");
         System.out.println();
 
-        readLine(scanner, "Press Enter to return to Options menu");
+        readLine(scanner, "Press Enter to return to Options menu\n");
     }
 
     private QuotaUI() {

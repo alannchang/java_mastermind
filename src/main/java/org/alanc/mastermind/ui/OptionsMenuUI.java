@@ -49,7 +49,7 @@ public class OptionsMenuUI {
     }
 
     private static void changeMaxAttempts(Scanner scanner, GameManager gameManager) {
-        GameConfig config = gameManager.getConfig();
+        GameConfig config = gameManager.getCurrentConfig();
         System.out.printf("Current attempts: %d\n", config.getMaxAttempts());
         int newAttempts = readNumberInRange(scanner, "Please enter number of attempts: ", 1, 100);
         
@@ -67,7 +67,7 @@ public class OptionsMenuUI {
     }
 
     private static void changeCodeLength(Scanner scanner, GameManager gameManager) {
-        GameConfig config = gameManager.getConfig();
+        GameConfig config = gameManager.getCurrentConfig();
         System.out.printf("Current secret code length: %d\n", config.getCodeLength());
         int newLength = readNumberInRange(scanner, "Please enter a number for code length: ", 1, 100);
         
@@ -85,7 +85,7 @@ public class OptionsMenuUI {
     }
 
     private static void changeMaxNumber(Scanner scanner, GameManager gameManager) {
-        GameConfig config = gameManager.getConfig();
+        GameConfig config = gameManager.getCurrentConfig();
         System.out.printf("Current secret code range: 0 to %d\n", config.getMaxNumber());
         int newMaxNumber = readNumberInRange(scanner, "Please enter max number for secret code: ", 1, 100);
         
@@ -110,13 +110,13 @@ public class OptionsMenuUI {
     }
 
     private static void resetToDefaults(Scanner scanner, GameManager gameManager) {
-        GameConfig config = gameManager.getConfig();
+        GameConfig config = gameManager.getCurrentConfig();
         config.resetToDefaults();
         
         logger.info("User reset settings to defaults");
         System.out.println("Default settings restored!");
 
-        readLine(scanner, "Press Enter to return to Options menu");
+        readLine(scanner, "Press Enter to return to Options menu\n");
     }
 
     private OptionsMenuUI() {

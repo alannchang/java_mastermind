@@ -15,7 +15,7 @@ public class AboutUI {
         printUI(Messages.ABOUT_BANNER);
         printUI(Messages.ABOUT_INFO);
 
-        readLine(scanner, "Press Enter to return to Main Menu");
+        readLine(scanner, "Press Enter to return to Main Menu\n");
 
         logger.debug("User returned from about screen");
     }

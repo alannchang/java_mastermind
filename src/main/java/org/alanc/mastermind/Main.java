@@ -17,7 +17,7 @@ public class Main {
         }));
 
         try (GameManager gameManager = new GameManager()) {
-            gameManager.start();
+            gameManager.launch();
         } catch (Exception e) {
             logger.error("An unexpected error occurred during application execution", e);
             System.err.println("An error occurred: " + e.getMessage());
