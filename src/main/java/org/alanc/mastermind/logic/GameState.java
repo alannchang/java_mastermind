@@ -1,6 +1,6 @@
 package org.alanc.mastermind.logic;
 
-import org.alanc.mastermind.config.GameConfigDTO;
+import org.alanc.mastermind.config.GameConfig;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,7 +29,7 @@ public final class GameState {
         this.playerWon = playerWon;
     }
 
-    public static GameState createNew(String secretCode, GameConfigDTO config) {
+    public static GameState createNew(String secretCode, GameConfig config) {
         ValidationResult validationResult = GameInputValidator.validateGuess(secretCode,
                 config.getCodeLength(), config.getMaxNumber());
         if (!validationResult.isValid()) {

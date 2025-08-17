@@ -1,6 +1,6 @@
 package org.alanc.mastermind.logic;
 
-import org.alanc.mastermind.config.GameConfigDTO;
+import org.alanc.mastermind.config.GameConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,12 +10,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("GameState Tests")
 class GameStateTest {
 
-    private GameConfigDTO defaultConfig;
+    private GameConfig defaultConfig;
     private GameState initialState;
 
     @BeforeEach
     void setUp() {
-        defaultConfig = new GameConfigDTO();
+        defaultConfig = new GameConfig();
         initialState = GameState.createNew("1 2 3 4", defaultConfig);
     }
 
@@ -42,7 +42,7 @@ class GameStateTest {
         @Test
         @DisplayName("Should create game state with custom configuration")
         void testCreateWithCustomConfig() {
-            GameConfigDTO customConfig = new GameConfigDTO.Builder()
+            GameConfig customConfig = new GameConfig.Builder()
                     .maxAttempts(15)
                     .codeLength(6)
                     .maxNumber(10)

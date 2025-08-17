@@ -1,19 +1,22 @@
 package org.alanc.mastermind.config;
 
-public class GameConfigDTO {
+public class GameConfig {
     private int maxAttempts;
     private int codeLength;
     private int maxNumber;
 
-    public GameConfigDTO (int maxAttempts, int codeLength, int maxNumber) {
-        this.maxAttempts = maxAttempts;
-        this.codeLength = codeLength;
-        this.maxNumber = maxNumber;
+    // constructor sets game parameters to default
+    public GameConfig() {
+        this.maxAttempts = 10;
+        this.codeLength = 4;
+        this.maxNumber = 7;
     }
 
-    // default config
-    public GameConfigDTO() {
-        this(10, 4, 7);
+    // used in UI
+    public void resetToDefaults() {
+        this.maxAttempts = 10;
+        this.codeLength = 4;
+        this.maxNumber = 7;
     }
 
     // Getters
@@ -26,7 +29,9 @@ public class GameConfigDTO {
     public void setCodeLength(int codeLength) { this.codeLength = codeLength; }
     public void setMaxNumber(int maxNumber) { this.maxNumber = maxNumber; }
 
-    private GameConfigDTO(Builder builder) {
+
+
+    private GameConfig(Builder builder) {
         this.maxAttempts = builder.maxAttempts;
         this.codeLength = builder.codeLength;
         this.maxNumber = builder.maxNumber;
@@ -53,8 +58,8 @@ public class GameConfigDTO {
             return this;
         }
 
-        public GameConfigDTO build() {
-            return new GameConfigDTO(this);
+        public GameConfig build() {
+            return new GameConfig(this);
         }
     }
 }

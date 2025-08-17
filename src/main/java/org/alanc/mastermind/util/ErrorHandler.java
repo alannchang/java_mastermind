@@ -87,6 +87,18 @@ public final class ErrorHandler {
         }
     }
 
+    public static void handleUIError(Logger logger, String uiComponent, Exception cause, String recoveryAction) {
+        String message = createMessage(
+                "handle user interaction in " + uiComponent,
+                cause.getMessage(),
+                "UI navigation",
+                recoveryAction
+        );
+
+        logger.warn("UI error: {}", message);
+        System.out.println("An error occurred. " + recoveryAction);
+    }
+
     // Private constructor to prevent instantiation
     private ErrorHandler() {
         throw new UnsupportedOperationException("Utility class cannot be instantiated");

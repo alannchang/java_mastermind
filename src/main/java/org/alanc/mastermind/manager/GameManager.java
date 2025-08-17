@@ -1,17 +1,17 @@
 package org.alanc.mastermind.manager;
 
-import org.alanc.mastermind.config.GameConfigDTO;
+import org.alanc.mastermind.config.GameConfig;
 import org.alanc.mastermind.logic.GameLogic;
 import org.alanc.mastermind.logic.GameState;
 import org.alanc.mastermind.random.RandomNumberService;
 import org.alanc.mastermind.random.RandomOrgService;
 import org.alanc.mastermind.random.QuotaChecker;
+import org.alanc.mastermind.ui.GameUI;
 import org.alanc.mastermind.util.ErrorHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Scanner;
 import org.alanc.mastermind.util.Utils;
-
 
 public class GameManager implements AutoCloseable{
     private static final Logger logger = LoggerFactory.getLogger(GameManager.class);
@@ -19,18 +19,28 @@ public class GameManager implements AutoCloseable{
     private final GameLogic gameLogic;
     private final Scanner scanner;
     private RandomNumberService randomNumberService;
-    private GameConfigDTO currentConfig;
+    private GameConfig currentConfig;
 
 
     public GameManager () {
         this.randomNumberService = new RandomOrgService();
         this.gameLogic = new GameLogic(randomNumberService);
         this.scanner = new Scanner(System.in);
-        this.currentConfig = new GameConfigDTO();
+        this.currentConfig = new GameConfig();
     }
 
-    public void startApplication() {
-        logger.info("Application started...");
+    public void start() {
+        GameUI.showMainMenu(scanner, this);
+    }
+
+    public GameConfig getConfig() {
+        return currentConfig;
+    }
+
+    public void startNewGame() {
+        logger.info("Starting new game with configuration: {} attempts, {} code length, {} max number",
+                currentConfig.getMaxAttempts(), currentConfig.getCodeLength(), currentConfig.getMaxNumber());
+
         GameState gameState = gameLogic.createNewGame(currentConfig);
         playOneRound(gameState);
     }
@@ -104,5 +114,4 @@ public class GameManager implements AutoCloseable{
             ErrorHandler.handleResourceError(logger, "QuotaChecker HTTP client", e, false);
         }
     }
-
 }

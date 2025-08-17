@@ -1,6 +1,6 @@
 package org.alanc.mastermind.logic;
 
-import org.alanc.mastermind.config.GameConfigDTO;
+import org.alanc.mastermind.config.GameConfig;
 import org.alanc.mastermind.random.MathRandomService;
 import org.alanc.mastermind.random.RandomNumberService;
 import org.alanc.mastermind.util.ErrorHandler;
@@ -16,7 +16,7 @@ public final class GameLogic {
         this.randomNumberService = randomNumberService;
     }
 
-    public GameState createNewGame(GameConfigDTO config) {
+    public GameState createNewGame(GameConfig config) {
         String secretCode = generateSecretCode(config);
         return GameState.createNew(secretCode, config);
     }
@@ -45,12 +45,12 @@ public final class GameLogic {
         return currentState.withGuess(validationResult.getNumbers());
     }
 
-    public boolean isValidGuess(String playerGuess, GameConfigDTO config) {
+    public boolean isValidGuess(String playerGuess, GameConfig config) {
         ValidationResult result = GameInputValidator.validateGuess(playerGuess, config.getCodeLength(), config.getMaxNumber());
         return result.isValid();
     }
 
-    private String generateSecretCode(GameConfigDTO config) {
+    private String generateSecretCode(GameConfig config) {
         // Try the injected service first
         String code = randomNumberService.generate(
                 config.getCodeLength(),
