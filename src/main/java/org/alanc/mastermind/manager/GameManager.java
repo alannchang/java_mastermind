@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Scanner;
 import org.alanc.mastermind.util.Utils;
+import static org.alanc.mastermind.ui.GameText.*;
 
 public class GameManager implements AutoCloseable{
     private static final Logger logger = LoggerFactory.getLogger(GameManager.class);
@@ -23,10 +24,17 @@ public class GameManager implements AutoCloseable{
 
 
     public GameManager () {
+        logger.info("Initializing GameManager");
+
         this.randomNumberService = new RandomOrgService();
         this.gameLogic = new GameLogic(randomNumberService);
         this.scanner = new Scanner(System.in);
         this.currentConfig = new GameConfig();
+
+        logger.debug("GameManager initialized");
+        logger.debug("Random Service set to {}", randomNumberService.getClass().getSimpleName());
+        logger.debug("Config set to default: {} attempts, {} code length, max number {},",
+                currentConfig.getMaxAttempts(), currentConfig.getCodeLength(), currentConfig.getMaxNumber());
     }
 
     public void start() {
@@ -42,10 +50,24 @@ public class GameManager implements AutoCloseable{
                 currentConfig.getMaxAttempts(), currentConfig.getCodeLength(), currentConfig.getMaxNumber());
 
         GameState gameState = gameLogic.createNewGame(currentConfig);
-        playOneRound(gameState);
+        playGame(gameState);
     }
 
-    private void playOneRound(GameState gameState) {
+    private void playGame(GameState initialState) {
+        while (true) {
+            GameState endState = playOneRound(initialState);
+
+            showEndGameMessage(endState);
+
+            if (!askToPlayAgain()) {
+                return;  // returns to main menu
+            }
+
+            initialState = gameLogic.createNewGame(currentConfig);
+        }
+    }
+
+    private GameState playOneRound(GameState gameState) {
         showWelcomeMessage(gameState.getMaxAttempts(), gameState.getCodeLength(), gameState.getMaxNumber());
 
         while(!gameState.isGameEnded()) {
@@ -67,6 +89,7 @@ public class GameManager implements AutoCloseable{
                 ErrorHandler.handleInputValidationError(logger, playerGuess, e.getMessage());
             }
         }
+        return gameState;
     }
 
     private void showWelcomeMessage(int maxAttempts, int codeLength, int maxNumber) {
@@ -75,6 +98,22 @@ public class GameManager implements AutoCloseable{
         System.out.printf("The secret code consists of %d integers from %d to %d.\n",
                 codeLength, 0, maxNumber);
         System.out.println("When entering your guess, please separate each integer with a single space.");
+    }
+
+    private void showEndGameMessage(GameState gameState) {
+        printUI(Messages.SEPARATOR);
+
+        if (gameState.hasPlayerWon()) {
+            printUI(Messages.YOU_WIN_BANNER);
+            System.out.printf("You guessed it! The code is %s.\n", gameState.getSecretCode());
+        } else {
+            printUI(Messages.YOU_LOSE_BANNER);
+            System.out.printf("Sorry, the secret code was: %s.\n", gameState.getSecretCode());
+        }
+    }
+
+    private boolean askToPlayAgain() {
+        return GameUI.showEndGameMenu(scanner);
     }
 
     @Override

@@ -25,7 +25,15 @@ public class GameUI {
         if (playerWon) {
             logger.info("Displaying victory banner");
             printUI(Messages.YOU_WIN_BANNER);
+        } else {
+            logger.info("Displaying defeat banner");
+            printUI(Messages.YOU_LOSE_BANNER);
         }
+        printUI(Messages.SEPARATOR);
+    }
+
+    public static boolean showEndGameMenu(Scanner scanner) {
+        return EndgameUI.show(scanner);
     }
 
     public static void quit() {
