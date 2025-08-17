@@ -36,10 +36,10 @@ public class QuotaUI {
         }
 
         System.out.println();
-        System.out.println("For more information, visit: https://www.random.org/quota/");
+        System.out.println("For more information, visit https://www.random.org/quota/");
         System.out.println();
 
-        readLine(scanner, "Press Enter to return to Main Menu");
+        readLine(scanner, "Press Enter to return to Options menu");
     }
 
     private QuotaUI() {

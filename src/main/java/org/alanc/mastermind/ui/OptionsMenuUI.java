@@ -116,7 +116,7 @@ public class OptionsMenuUI {
         logger.info("User reset settings to defaults");
         System.out.println("Default settings restored!");
 
-        readLine(scanner, "Press Enter to return to Main Menu");
+        readLine(scanner, "Press Enter to return to Options menu");
     }
 
     private OptionsMenuUI() {
