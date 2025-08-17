@@ -32,6 +32,8 @@
 ### 8/16
 - Added proper resource management using try-with-resources 
 - Application handles Ctrl+D
+- Added UI menus so players can customize their games, check quota, etc.
+- Added more tests
 
 ### 8/17
 
@@ -73,7 +75,7 @@
 - [X] Add ability to check random.org api quota
 - [ ] Add ability to load/save games, history, etc. (persistence using a database)
 - [ ] Add hint system
-- [ ] Add configurable difficulty (number range / attempts)
+- [X] Add configurable difficulty (number range / attempts)
 - [ ] Add multiplayer mode
 - [ ] Keep score across games
 - [ ] Add timers (per guess or per game)
