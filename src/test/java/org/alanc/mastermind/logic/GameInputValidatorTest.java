@@ -154,9 +154,7 @@ class GameInputValidatorTest {
             assertFalse(result.isValid());
             assertTrue(result.getErrorMessage().contains("Numbers must be between 0 and 2."));
         }
-
     }
-
 
     @Nested
     @DisplayName("intArrayToString() tests")
