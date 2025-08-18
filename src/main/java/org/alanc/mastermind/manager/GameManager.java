@@ -5,7 +5,7 @@ import org.alanc.mastermind.logic.GameLogic;
 import org.alanc.mastermind.logic.GameState;
 import org.alanc.mastermind.random.RandomNumberService;
 import org.alanc.mastermind.random.RandomOrgService;
-import org.alanc.mastermind.random.QuotaChecker;
+
 import org.alanc.mastermind.ui.GameUI;
 import org.alanc.mastermind.util.ErrorHandler;
 import org.slf4j.Logger;
@@ -22,17 +22,17 @@ public class GameManager implements AutoCloseable{
     private RandomNumberService randomNumberService;
     private GameConfig currentConfig;
 
-    public GameManager () {
+    public GameManager(RandomNumberService randomNumberService) {
         logger.info("Initializing GameManager");
 
-        this.randomNumberService = new RandomOrgService();
+        this.randomNumberService = randomNumberService;
         this.gameLogic = new GameLogic(randomNumberService);
         this.scanner = new Scanner(System.in);
         this.currentConfig = new GameConfig();
 
         logger.debug("GameManager initialized");
         logger.debug("Random Service set to {}", randomNumberService.getClass().getSimpleName());
-        logger.debug("Config set to default: {} attempts, {} code length, max number {},",
+        logger.debug("Config set to: {} attempts, {} code length, max number {}",
                 currentConfig.getMaxAttempts(), currentConfig.getCodeLength(), currentConfig.getMaxNumber());
     }
 
@@ -119,37 +119,21 @@ public class GameManager implements AutoCloseable{
     public void close() {
         logger.debug("Closing GameManager resources");
         
-        closeScanner();
-        closeRandomOrgService();
-        closeQuotaChecker();
+        closeResource("scanner", scanner);
+        closeResource("random number service", randomNumberService);
     }
 
-    private void closeScanner() {
+    private void closeResource(String resourceName, AutoCloseable resource) {
         try {
-            if (scanner != null) {
-                scanner.close();
-                logger.debug("input scanner closed successfully");
+            if (resource != null) {
+                resource.close();
+                logger.debug("{} closed successfully", resourceName);
             }
         } catch (Exception e) {
-            ErrorHandler.handleResourceError(logger, "input scanner", e, false);
+            ErrorHandler.handleResourceError(logger, resourceName, e, false);
         }
     }
 
-    private void closeRandomOrgService() {
-        try {
-            RandomOrgService.shutdown();
-            logger.debug("RandomOrgService HTTP client closed successfully");
-        } catch (Exception e) {
-            ErrorHandler.handleResourceError(logger, "RandomOrgService HTTP client", e, false);
-        }
-    }
 
-    private void closeQuotaChecker() {
-        try {
-            QuotaChecker.shutdown();
-            logger.debug("QuotaChecker HTTP client closed successfully");
-        } catch (Exception e) {
-            ErrorHandler.handleResourceError(logger, "QuotaChecker HTTP client", e, false);
-        }
-    }
 }
+

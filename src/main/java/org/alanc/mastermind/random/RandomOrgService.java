@@ -76,6 +76,11 @@ public class RandomOrgService implements RandomNumberService {
         return null;
     }
 
+    @Override
+    public void close() throws Exception {
+        shutdown();
+    }
+
     public static void shutdown() {
         logger.debug("Shutting down RandomOrgService HTTP client");
         client.dispatcher().executorService().shutdown();

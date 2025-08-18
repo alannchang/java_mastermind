@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-public class QuotaChecker {
+public class QuotaChecker implements AutoCloseable {
     private static final Logger logger = LoggerFactory.getLogger(QuotaChecker.class);
 
     private static final String QUOTA_API = "https://www.random.org/quota/";
@@ -57,6 +57,11 @@ public class QuotaChecker {
                     new RuntimeException("Invalid response format: " + e.getMessage(), e), false);
             return -1;
         }
+    }
+
+    @Override
+    public void close() throws Exception {
+        shutdown();
     }
 
     public static void shutdown() {
