@@ -61,7 +61,7 @@ public class OptionsMenuUI {
             );
         }
         
-        config.setMaxAttempts(newAttempts);
+        gameManager.updateMaxAttempts(newAttempts);
         logger.info("User changed max attempts to: {}", newAttempts);
         System.out.printf("Max attempts updated to: %d\n", newAttempts);
     }
@@ -79,7 +79,7 @@ public class OptionsMenuUI {
             );
         }
         
-        config.setCodeLength(newLength);
+        gameManager.updateCodeLength(newLength);
         logger.info("User changed code length to: {}", newLength);
         System.out.printf("Code length updated to: %d\n", newLength);
     }
@@ -104,14 +104,13 @@ public class OptionsMenuUI {
             );
         }
         
-        config.setMaxNumber(newMaxNumber);
+        gameManager.updateMaxNumber(newMaxNumber);
         logger.info("User changed max number to: {}", newMaxNumber);
         System.out.printf("Secret code range updated to: 0 to %d\n", newMaxNumber);
     }
 
     private static void resetToDefaults(Scanner scanner, GameManager gameManager) {
-        GameConfig config = gameManager.getCurrentConfig();
-        config.resetToDefaults();
+        gameManager.resetConfigToDefaults();
         
         logger.info("User reset settings to defaults");
         System.out.println("Default settings restored!");

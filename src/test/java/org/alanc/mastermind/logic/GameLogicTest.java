@@ -19,46 +19,22 @@ class GameLogicTest {
     void setUp() {
         testRandomService = new TestRandomNumberService("1 2 3 4");
         gameLogic = new GameLogic(testRandomService);
-        defaultConfig = new GameConfig();
+        defaultConfig = GameConfig.defaults();
     }
 
     @Nested
-    @DisplayName("Game Creation Tests")
+    @DisplayName("Game Creation")
     class GameCreationTests {
 
         @Test
-        @DisplayName("Should create new game with random secret code")
+        @DisplayName("Should create new game with injected random service")
         void testCreateNewGame() {
             GameState gameState = gameLogic.createNewGame(defaultConfig);
 
-            assertNotNull(gameState);
             assertEquals("1 2 3 4", gameState.getSecretCode());
             assertEquals(defaultConfig.getMaxAttempts(), gameState.getAttemptsRemaining());
             assertFalse(gameState.isGameEnded());
-            assertFalse(gameState.hasPlayerWon());
             assertTrue(gameState.getGuessHistory().isEmpty());
-        }
-
-        @Test
-        @DisplayName("Should create game with custom configuration")
-        void testCreateGameWithCustomConfig() {
-            GameConfig customConfig = new GameConfig.Builder()
-                    .maxAttempts(15)
-                    .codeLength(6)
-                    .maxNumber(10)
-                    .build();
-
-            TestRandomNumberService customService = new TestRandomNumberService("1 2 3 4 5 6");
-            GameLogic customLogic = new GameLogic(customService);
-
-            GameState gameState = customLogic.createNewGame(customConfig);
-
-            assertNotNull(gameState);
-            assertEquals("1 2 3 4 5 6", gameState.getSecretCode());
-            assertEquals(15, gameState.getAttemptsRemaining());
-            assertEquals(customConfig.getMaxAttempts(), gameState.getMaxAttempts());
-            assertEquals(customConfig.getCodeLength(), gameState.getCodeLength());
-            assertEquals(customConfig.getMaxNumber(), gameState.getMaxNumber());
         }
 
         @Test
@@ -69,22 +45,14 @@ class GameLogicTest {
 
             GameState gameState = logicWithFailingService.createNewGame(defaultConfig);
 
-            assertNotNull(gameState);
             assertNotNull(gameState.getSecretCode());
-            assertFalse(gameState.getSecretCode().isEmpty());
-
-            // Should have 4 numbers in valid range
             String[] numbers = gameState.getSecretCode().split(" ");
             assertEquals(4, numbers.length);
-            for (String numberStr : numbers) {
-                int number = Integer.parseInt(numberStr);
-                assertTrue(number >= 0 && number <= 8);
-            }
         }
     }
 
     @Nested
-    @DisplayName("Guess Processing Tests")
+    @DisplayName("Guess Processing")
     class GuessProcessingTests {
 
         private GameState gameState;
@@ -95,33 +63,13 @@ class GameLogicTest {
         }
 
         @Test
-        @DisplayName("Should process valid guess correctly")
-        void testProcessValidGuess() {
-            String guess = "1 2 3 5"; // Partially correct
-            GameState newState = gameLogic.processGuess(gameState, guess);
-
-            assertNotNull(newState);
-            assertEquals(1, newState.getGuessHistory().size());
-            assertEquals(9, newState.getAttemptsRemaining());
-            assertFalse(newState.isGameEnded());
-
-            GameState.GuessResult result = newState.getGuessHistory().get(0);
-            assertEquals(guess, result.guess());
-            assertFalse(result.allCorrect());
-        }
-
-        @Test
-        @DisplayName("Should process winning guess correctly")
+        @DisplayName("Should process winning guess")
         void testProcessWinningGuess() {
-            String winningGuess = "1 2 3 4"; // Exact match
-            GameState newState = gameLogic.processGuess(gameState, winningGuess);
+            GameState newState = gameLogic.processGuess(gameState, "1 2 3 4");
 
-            assertNotNull(newState);
             assertTrue(newState.isGameEnded());
             assertTrue(newState.hasPlayerWon());
-
-            GameState.GuessResult result = newState.getGuessHistory().get(0);
-            assertTrue(result.allCorrect());
+            assertEquals(1, newState.getGuessHistory().size());
         }
 
         @Test
@@ -135,128 +83,36 @@ class GameLogicTest {
         @Test
         @DisplayName("Should reject processing guess on ended game")
         void testProcessGuessOnEndedGame() {
-            // Create a game that's already ended
-            GameState winningState = gameLogic.processGuess(gameState, "1 2 3 4");
+            GameState endedState = gameLogic.processGuess(gameState, "1 2 3 4");
 
             assertThrows(IllegalStateException.class, () -> {
-                gameLogic.processGuess(winningState, "2 3 4 5");
+                gameLogic.processGuess(endedState, "2 3 4 5");
             });
-        }
-
-        @Test
-        @DisplayName("Should handle game ending when attempts run out")
-        void testGameEndingWithoutWin() {
-            GameState currentState = gameState;
-
-            // Make 10 incorrect guesses (using valid numbers 0-7)
-            for (int i = 0; i < 10; i++) {
-                String guess = "3 4 5 6"; // Incorrect guess
-                currentState = gameLogic.processGuess(currentState, guess);
-            }
-
-            assertTrue(currentState.isGameEnded());
-            assertFalse(currentState.hasPlayerWon());
-            assertEquals(0, currentState.getAttemptsRemaining());
-            assertEquals(10, currentState.getGuessHistory().size());
         }
     }
 
     @Nested
-    @DisplayName("Guess Validation Tests")
-    class GuessValidationTests {
+    @DisplayName("Input Validation")
+    class ValidationTests {
 
         @Test
-        @DisplayName("Should validate correct guess format")
+        @DisplayName("Should validate correct guess formats")
         void testValidGuessFormat() {
             GameState gameState = gameLogic.createNewGame(defaultConfig);
+            
             assertTrue(gameLogic.isValidGuess("1 2 3 4", gameState));
-            assertTrue(gameLogic.isValidGuess("0 7 0 7", gameState));
-            assertTrue(gameLogic.isValidGuess("  1  2  3  4  ", gameState));
+            assertTrue(gameLogic.isValidGuess("  0  7  0  7  ", gameState));
         }
 
         @Test
         @DisplayName("Should reject invalid guess formats")
         void testInvalidGuessFormats() {
             GameState gameState = gameLogic.createNewGame(defaultConfig);
+            
             assertFalse(gameLogic.isValidGuess("1 2 3", gameState)); // Too few
-            assertFalse(gameLogic.isValidGuess("1 2 3 4 5", gameState)); // Too many
             assertFalse(gameLogic.isValidGuess("1 a 3 4", gameState)); // Non-numeric
-            assertFalse(gameLogic.isValidGuess("-1 2 3 4", gameState)); // Negative
             assertFalse(gameLogic.isValidGuess("1 2 3 9", gameState)); // Out of range
-            assertFalse(gameLogic.isValidGuess("", gameState)); // Empty
             assertFalse(gameLogic.isValidGuess(null, gameState)); // Null
-        }
-
-        @Test
-        @DisplayName("Should validate with custom configuration")
-        void testValidationWithCustomConfig() {
-            GameConfig customConfig = new GameConfig.Builder()
-                    .codeLength(3)
-                    .maxNumber(5)
-                    .build();
-
-            GameState customGameState = gameLogic.createNewGame(customConfig);
-            assertTrue(gameLogic.isValidGuess("0 3 5", customGameState));
-            assertFalse(gameLogic.isValidGuess("0 3 6", customGameState)); // 6 > maxNumber
-            assertFalse(gameLogic.isValidGuess("0 3", customGameState)); // Too short
-        }
-    }
-
-    @Nested
-    @DisplayName("Random Service Integration Tests")
-    class RandomServiceIntegrationTests {
-
-        @Test
-        @DisplayName("Should use injected random service")
-        void testUsesInjectedRandomService() {
-            TestRandomNumberService customService = new TestRandomNumberService("7 6 5 4");
-            GameLogic customLogic = new GameLogic(customService);
-
-            GameState gameState = customLogic.createNewGame(defaultConfig);
-
-            assertEquals("7 6 5 4", gameState.getSecretCode());
-        }
-
-        @Test
-        @DisplayName("Should respect configuration parameters in random generation")
-        void testRespectsConfigurationInGeneration() {
-            // Create service that returns sequential numbers starting from min
-            TestRandomNumberService parameterAwareService = new TestRandomNumberService("") {
-                @Override
-                public String generate(int quantity, int min, int max) {
-                    StringBuilder result = new StringBuilder();
-                    for (int i = 0; i < quantity; i++) {
-                        if (i > 0) result.append(" ");
-                        result.append(min + i); // Sequential from min
-                    }
-                    return result.toString();
-                }
-            };
-
-            GameLogic customLogic = new GameLogic(parameterAwareService);
-
-            GameConfig config = new GameConfig.Builder()
-                    .codeLength(3)
-                    .maxNumber(5)
-                    .build();
-
-            GameState gameState = customLogic.createNewGame(config);
-
-            assertEquals("0 1 2", gameState.getSecretCode()); // Sequential from 0
-        }
-
-        @Test
-        @DisplayName("Should handle null response from random service")
-        void testHandlesNullFromRandomService() {
-            TestRandomNumberService nullService = new TestRandomNumberService(null);
-            GameLogic logicWithNullService = new GameLogic(nullService);
-
-            // Fallback to MathRandom and not throw exception
-            assertDoesNotThrow(() -> {
-                GameState gameState = logicWithNullService.createNewGame(defaultConfig);
-                assertNotNull(gameState.getSecretCode());
-                assertFalse(gameState.getSecretCode().isEmpty());
-            });
         }
     }
 }

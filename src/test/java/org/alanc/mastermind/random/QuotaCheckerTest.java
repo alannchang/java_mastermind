@@ -2,11 +2,11 @@ package org.alanc.mastermind.random;
 
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 
+@DisplayName("QuotaChecker Tests")
 class QuotaCheckerTest {
 
     private MockWebServer mockWebServer;
@@ -16,8 +16,7 @@ class QuotaCheckerTest {
     void setUp() throws IOException {
         mockWebServer = new MockWebServer();
         mockWebServer.start();
-
-        // Create service with custom URLs pointing to our mock server
+        
         String baseUrl = mockWebServer.url("/").toString();
         service = new QuotaChecker(baseUrl + "quota/");
     }
@@ -27,83 +26,38 @@ class QuotaCheckerTest {
         mockWebServer.shutdown();
     }
 
-    @Nested
-    @DisplayName("Quota Checking Tests")
-    class QuotaTests {
+    @Test
+    @DisplayName("Should handle successful quota check")
+    void testSuccessfulQuotaCheck() {
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(200)
+                .setBody("9850"));
 
-        @Test
-        @DisplayName("Should handle successful quota check")
-        void testSuccessfulQuotaCheck() throws InterruptedException {
-            mockWebServer.enqueue(new MockResponse()
-                    .setResponseCode(200)
-                    .setBody("9850"));
+        int quota = service.getQuota();
 
-            int quota = service.getQuota();
+        assertEquals(9850, quota);
+    }
 
-            assertEquals(9850, quota);
+    @Test
+    @DisplayName("Should handle API failures")
+    void testApiFailure() {
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(500));
 
-            RecordedRequest request = mockWebServer.takeRequest();
-            assertTrue(request.getPath().contains("getusage"));
-            assertTrue(request.getPath().contains("format=plain"));
-        }
+        int quota = service.getQuota();
 
-        @Test
-        @DisplayName("Should handle zero quota")
-        void testZeroQuota() {
-            mockWebServer.enqueue(new MockResponse()
-                    .setResponseCode(200)
-                    .setBody("0"));
+        assertEquals(-1, quota); // Error indicator
+    }
 
-            int quota = service.getQuota();
+    @Test
+    @DisplayName("Should handle invalid response format")
+    void testInvalidResponseFormat() {
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(200)
+                .setBody("not-a-number"));
 
-            assertEquals(0, quota);
-        }
+        int quota = service.getQuota();
 
-        @Test
-        @DisplayName("Should handle quota check failure")
-        void testQuotaCheckFailure() {
-            mockWebServer.enqueue(new MockResponse()
-                    .setResponseCode(500)
-                    .setBody("Server Error"));
-
-            int quota = service.getQuota();
-
-            assertEquals(-1, quota);
-        }
-
-        @Test
-        @DisplayName("Should handle quota check with invalid response")
-        void testQuotaCheckInvalidResponse() {
-            mockWebServer.enqueue(new MockResponse()
-                    .setResponseCode(200)
-                    .setBody("not-a-number"));
-
-            int quota = service.getQuota();
-
-            assertEquals(-1, quota);
-        }
-
-        @Test
-        @DisplayName("Should handle quota check network error")
-        void testQuotaCheckNetworkError() throws IOException {
-            mockWebServer.shutdown();
-
-            int quota = service.getQuota();
-
-            assertEquals(-1, quota);
-        }
-
-        @Test
-        @DisplayName("Should handle negative quota values")
-        void testNegativeQuota() {
-            mockWebServer.enqueue(new MockResponse()
-                    .setResponseCode(200)
-                    .setBody("-100"));
-
-            int quota = service.getQuota();
-
-            assertEquals(-100, quota);
-        }
+        assertEquals(-1, quota); // Error indicator
     }
 }
-

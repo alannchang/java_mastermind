@@ -1,22 +1,25 @@
 package org.alanc.mastermind.config;
 
-public class GameConfig {
-    private int maxAttempts;
-    private int codeLength;
-    private int maxNumber;
+public final class GameConfig {
+    private final int maxAttempts;
+    private final int codeLength;
+    private final int maxNumber;
 
-    // constructor sets game parameters to default
-    public GameConfig() {
-        this.maxAttempts = 10;
-        this.codeLength = 4;
-        this.maxNumber = 7;
-    }
-
-    // used in UI
-    public void resetToDefaults() {
-        this.maxAttempts = 10;
-        this.codeLength = 4;
-        this.maxNumber = 7;
+    private GameConfig(int maxAttempts, int codeLength, int maxNumber) {
+        // Validate parameters
+        if (maxAttempts <= 0) {
+            throw new IllegalArgumentException("maxAttempts must be positive, got: " + maxAttempts);
+        }
+        if (codeLength <= 0) {
+            throw new IllegalArgumentException("codeLength must be positive, got: " + codeLength);
+        }
+        if (maxNumber < 0) {
+            throw new IllegalArgumentException("maxNumber must be non-negative, got: " + maxNumber);
+        }
+        
+        this.maxAttempts = maxAttempts;
+        this.codeLength = codeLength;
+        this.maxNumber = maxNumber;
     }
 
     // Getters
@@ -24,22 +27,14 @@ public class GameConfig {
     public int getCodeLength() { return codeLength; }
     public int getMaxNumber() { return maxNumber; }
 
-    // Setters used when players want to customize their game
-    public void setMaxAttempts(int maxAttempts) { this.maxAttempts = maxAttempts; }
-    public void setCodeLength(int codeLength) { this.codeLength = codeLength; }
-    public void setMaxNumber(int maxNumber) { this.maxNumber = maxNumber; }
-
-
-
-    private GameConfig(Builder builder) {
-        this.maxAttempts = builder.maxAttempts;
-        this.codeLength = builder.codeLength;
-        this.maxNumber = builder.maxNumber;
+    // Convenience method for default configuration
+    public static GameConfig defaults() {
+        return new Builder().build();
     }
 
     // Builder
     public static class Builder {
-        private int maxAttempts = 10; // Defaults
+        private int maxAttempts = 10; // Default values
         private int codeLength = 4;
         private int maxNumber = 7;
 
@@ -58,8 +53,16 @@ public class GameConfig {
             return this;
         }
 
+        // Create builder from existing config for "mutation" pattern
+        public static Builder from(GameConfig existing) {
+            return new Builder()
+                .maxAttempts(existing.maxAttempts)
+                .codeLength(existing.codeLength)
+                .maxNumber(existing.maxNumber);
+        }
+
         public GameConfig build() {
-            return new GameConfig(this);
+            return new GameConfig(maxAttempts, codeLength, maxNumber);
         }
     }
 }
