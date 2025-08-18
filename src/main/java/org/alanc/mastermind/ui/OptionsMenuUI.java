@@ -53,14 +53,6 @@ public class OptionsMenuUI {
         System.out.printf("Current attempts: %d\n", config.getMaxAttempts());
         int newAttempts = readNumberInRange(scanner, "Please enter number of attempts: ", 1, 100);
         
-        if (newAttempts < 1 || newAttempts > 100) {
-            throw ErrorHandler.invalidParameter(
-                    "max attempts",
-                    newAttempts,
-                    "must be between 1 and 100"
-            );
-        }
-        
         gameManager.updateMaxAttempts(newAttempts);
         logger.info("User changed max attempts to: {}", newAttempts);
         System.out.printf("Max attempts updated to: %d\n", newAttempts);
@@ -71,14 +63,6 @@ public class OptionsMenuUI {
         System.out.printf("Current secret code length: %d\n", config.getCodeLength());
         int newLength = readNumberInRange(scanner, "Please enter a number for code length: ", 1, 100);
         
-        if (newLength < 1 || newLength > 100) {
-            throw ErrorHandler.invalidParameter(
-                    "code length",
-                    newLength,
-                    "must be between 1 and 100"
-            );
-        }
-        
         gameManager.updateCodeLength(newLength);
         logger.info("User changed code length to: {}", newLength);
         System.out.printf("Code length updated to: %d\n", newLength);
@@ -88,21 +72,6 @@ public class OptionsMenuUI {
         GameConfig config = gameManager.getCurrentConfig();
         System.out.printf("Current secret code range: 0 to %d\n", config.getMaxNumber());
         int newMaxNumber = readNumberInRange(scanner, "Please enter max number for secret code: ", 1, 100);
-        
-        if (newMaxNumber < 0 || newMaxNumber > 100) {
-            throw ErrorHandler.invalidParameter(
-                    "max number",
-                    newMaxNumber,
-                    "must be between 0 and 100"
-            );
-        }
-        if (newMaxNumber < 1) {
-            throw ErrorHandler.invalidParameter(
-                    "max number",
-                    newMaxNumber,
-                    "must be at least 1 to provide a valid range (0 to max)"
-            );
-        }
         
         gameManager.updateMaxNumber(newMaxNumber);
         logger.info("User changed max number to: {}", newMaxNumber);
