@@ -116,7 +116,31 @@ public class GameDAO implements AutoCloseable {
     /**
      * Checks if the most recent game is incomplete.
      */
-    public Optional<GameRecord> findLastIncompleteGame() {
+    public boolean isLastGameIncomplete() {
+        String sql = """
+            SELECT status FROM games 
+            ORDER BY started_at DESC 
+            LIMIT 1
+            """;
+        
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            if (rs.next()) {
+                String status = rs.getString("status");
+                return GameStatus.IN_PROGRESS.name().equals(status);
+            }
+        } catch (SQLException e) {
+            logger.error("Failed to check if last game is incomplete", e);
+            throw new RuntimeException("Failed to check if last game is incomplete", e);
+        }
+        return false; // No games exist
+    }
+
+    /**
+     * Gets the most recent game record.
+     */
+    public Optional<GameRecord> getLastGame() {
         String sql = """
             SELECT * FROM games 
             ORDER BY started_at DESC 
@@ -127,15 +151,11 @@ public class GameDAO implements AutoCloseable {
              ResultSet rs = stmt.executeQuery()) {
             
             if (rs.next()) {
-                GameRecord record = mapResultSetToRecord(rs);
-                // Return only if the latest game is incomplete
-                if (GameStatus.IN_PROGRESS.name().equals(record.getStatus())) {
-                    return Optional.of(record);
-                }
+                return Optional.of(mapResultSetToRecord(rs));
             }
         } catch (SQLException e) {
-            logger.error("Failed to find last incomplete game", e);
-            throw new RuntimeException("Failed to find last incomplete game", e);
+            logger.error("Failed to get last game", e);
+            throw new RuntimeException("Failed to get last game", e);
         }
         return Optional.empty();
     }

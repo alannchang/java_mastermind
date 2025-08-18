@@ -21,6 +21,9 @@ dependencies {
     // SQLite
     implementation("org.xerial:sqlite-jdbc:3.44.1.0")
 
+    // JSON processing
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.16.1")
+
     // JUnit
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
