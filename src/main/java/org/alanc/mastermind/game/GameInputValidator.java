@@ -1,7 +1,19 @@
 package org.alanc.mastermind.game;
 
+/**
+ * Validates player input for Mastermind guesses.
+ * Ensures guesses match the required format, length, and number range.
+ */
 public class GameInputValidator {
 
+    /**
+     * Validates a player's guess against game configuration requirements.
+     * 
+     * @param playerGuess the player's input string
+     * @param expectedLength the required number of digits in the guess
+     * @param maxValue the maximum allowed value for each digit
+     * @return a ValidationResult containing success/failure status and parsed numbers
+     */
     public static ValidationResult validateGuess(String playerGuess, int expectedLength, int maxValue) {
         if (playerGuess == null || playerGuess.trim().isEmpty()) {
             return ValidationResult.failure("Please enter your guess.");
@@ -29,6 +41,12 @@ public class GameInputValidator {
         return ValidationResult.success(numbers);
     }
 
+    /**
+     * Converts an array of integers to a space-separated string.
+     * 
+     * @param numbers the array of integers to convert
+     * @return a space-separated string representation
+     */
     public static String intArrayToString(int[] numbers) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < numbers.length; i++) {

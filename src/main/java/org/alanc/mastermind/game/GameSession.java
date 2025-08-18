@@ -11,6 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Scanner;
 
+/**
+ * Manages the execution of individual Mastermind game sessions.
+ * Handles the game loop, user input, and round-by-round gameplay.
+ */
 public class GameSession {
     private static final Logger logger = LoggerFactory.getLogger(GameSession.class);
     

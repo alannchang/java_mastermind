@@ -5,6 +5,15 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Immutable representation of a Mastermind game state.
+ *
+ * This class encapsulates all information about a game in progress, including:
+ * - the secret code to be guessed
+ * - history of all player guesses and their results
+ * - remaining attempts and game configuration
+ * - current game status (active, won, lost)
+ */
 public final class GameState {
     private final String secretCode;
     private final int[] secretCodeNumbers;
@@ -29,6 +38,14 @@ public final class GameState {
         this.playerWon = playerWon;
     }
 
+    /**
+     * Creates a new game state with the specified secret code and configuration.
+     * 
+     * @param secretCode the secret code that players must guess (e.g., "1 2 3 4")
+     * @param config the game configuration containing rules and limits
+     * @return a new GameState instance ready for play
+     * @throws IllegalArgumentException if the secret code is invalid for the given configuration
+     */
     public static GameState createNew(String secretCode, GameConfig config) {
         ValidationResult validationResult = GameInputValidator.validateGuess(secretCode,
                 config.getCodeLength(), config.getMaxNumber());
@@ -49,6 +66,16 @@ public final class GameState {
         );
     }
 
+    /**
+     * Creates a new game state by processing a player's guess.
+     * 
+     * This method evaluates the guess against the secret code, updates the
+     * guess history, decrements attempts, and determines if the game has ended.
+     * 
+     * @param guessNumbers the player's guess as an array of integers
+     * @return a new GameState reflecting the result of this guess
+     * @throws IllegalStateException if the game has already ended
+     */
     public GameState withGuess(int[] guessNumbers) {
         if (gameEnded) {
             throw new IllegalStateException("Cannot add guess to ended game");
@@ -131,8 +158,21 @@ public final class GameState {
     public boolean isGameEnded() { return gameEnded; }
     public boolean hasPlayerWon() { return playerWon; }
 
+    /**
+     * Represents the result of evaluating a player's guess against the secret code.
+     * 
+     * @param guess the original guess as a string (e.g., "1 2 3 4")
+     * @param correctNumbers total count of correct numbers (regardless of position)
+     * @param correctLocations count of numbers in the correct position
+     * @param allCorrect true if this guess matches the secret code exactly
+     */
     public record GuessResult(String guess, int correctNumbers, int correctLocations, boolean allCorrect) {
 
+        /**
+         * Generates human-readable feedback for this guess result.
+         * 
+         * @return a descriptive message about the guess accuracy
+         */
         public String provideFeedback() {
                 if (allCorrect) {
                     return "You guessed all the numbers correctly!";

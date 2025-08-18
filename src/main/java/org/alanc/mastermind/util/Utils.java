@@ -3,8 +3,20 @@ package org.alanc.mastermind.util;
 import java.util.Scanner;
 import java.util.NoSuchElementException;
 
+/**
+ * Utility class for console I/O operations.
+ * Handles user input with graceful termination on EOF (Ctrl+D).
+ */
 public class Utils {
 
+    /**
+     * Reads a line of input from the scanner with graceful EOF handling.
+     * 
+     * @param scanner the input scanner
+     * @param prompt the prompt to display to the user
+     * @return the user's input string
+     * @throws GameTerminatedException if EOF is detected (Ctrl+D)
+     */
     public static String readLine(Scanner scanner, String prompt) {
         System.out.print(prompt);
         try {
@@ -22,6 +34,16 @@ public class Utils {
         }
     }
 
+    /**
+     * Reads an integer within a specified range with input validation.
+     * 
+     * @param scanner the input scanner
+     * @param prompt the prompt to display to the user
+     * @param min the minimum allowed value (inclusive)
+     * @param max the maximum allowed value (inclusive)
+     * @return a valid integer within the specified range
+     * @throws GameTerminatedException if EOF is detected (Ctrl+D)
+     */
     public static int readNumberInRange(Scanner scanner, String prompt, int min, int max) {
         while (true) {
             String input = readLine(scanner, prompt);

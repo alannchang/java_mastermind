@@ -7,6 +7,10 @@ import org.alanc.mastermind.util.ErrorHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * External random number generator using the Random.org API.
+ * Provides truly random numbers with automatic fallback on failure.
+ */
 public class RandomOrgService implements RandomNumberService {
     private static final Logger logger = LoggerFactory.getLogger(RandomOrgService.class);
 

@@ -8,7 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Main application class that handles application lifecycle
+ * Main application class for Mastermind.
+ * Handles application bootstrapping, resource management, and graceful shutdown.
  */
 public class MastermindApplication {
     private static final Logger logger = LoggerFactory.getLogger(MastermindApplication.class);

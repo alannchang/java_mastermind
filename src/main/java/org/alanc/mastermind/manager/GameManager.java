@@ -10,6 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Scanner;
 
+/**
+ * Manages the Mastermind application lifecycle and configuration.
+ * Handles application startup/shutdown, configuration management, and resource cleanup.
+ * Delegates game execution to GameSession.
+ */
 public class GameManager implements AutoCloseable {
     private static final Logger logger = LoggerFactory.getLogger(GameManager.class);
 
@@ -18,6 +23,11 @@ public class GameManager implements AutoCloseable {
     private final RandomNumberService randomNumberService;
     private GameConfig currentConfig;
 
+    /**
+     * Constructs a new GameManager with the specified random number service.
+     * 
+     * @param randomNumberService the service to use for generating secret codes
+     */
     public GameManager(RandomNumberService randomNumberService) {
         logger.info("Initializing GameManager");
 
@@ -29,16 +39,25 @@ public class GameManager implements AutoCloseable {
         logger.debug("GameManager initialized with {} service", randomNumberService.getClass().getSimpleName());
     }
 
-    // Application lifecycle
+    /** Launches the main application menu. */
     public void launch() {
         GameUI.showMainMenu(scanner, this);
     }
 
-    // Configuration management
+    /**
+     * Gets the current game configuration.
+     * 
+     * @return the current GameConfig instance
+     */
     public GameConfig getCurrentConfig() {
         return currentConfig;
     }
 
+    /**
+     * Updates the maximum number of attempts allowed.
+     * 
+     * @param maxAttempts the new maximum number of attempts
+     */
     public void updateMaxAttempts(int maxAttempts) {
         this.currentConfig = GameConfig.Builder.from(currentConfig)
             .maxAttempts(maxAttempts)
@@ -46,6 +65,11 @@ public class GameManager implements AutoCloseable {
         logger.info("Updated max attempts to: {}", maxAttempts);
     }
 
+    /**
+     * Updates the length of the secret code.
+     * 
+     * @param codeLength the new code length
+     */
     public void updateCodeLength(int codeLength) {
         this.currentConfig = GameConfig.Builder.from(currentConfig)
             .codeLength(codeLength)
@@ -53,6 +77,11 @@ public class GameManager implements AutoCloseable {
         logger.info("Updated code length to: {}", codeLength);
     }
 
+    /**
+     * Updates the maximum number value allowed in the secret code.
+     * 
+     * @param maxNumber the new maximum number value
+     */
     public void updateMaxNumber(int maxNumber) {
         this.currentConfig = GameConfig.Builder.from(currentConfig)
             .maxNumber(maxNumber)
@@ -60,12 +89,13 @@ public class GameManager implements AutoCloseable {
         logger.info("Updated max number to: {}", maxNumber);
     }
 
+    /** Resets the game configuration to default values. */
     public void resetConfigToDefaults() {
         this.currentConfig = GameConfig.defaults();
         logger.info("Reset configuration to defaults");
     }
 
-    // Game session delegation
+    /** Starts a new game session with the current configuration. */
     public void startNewGame() {
         logger.info("Starting new game session");
         
@@ -73,7 +103,7 @@ public class GameManager implements AutoCloseable {
         gameSession.play(currentConfig);
     }
 
-    // Resource management
+    /** Closes all resources managed by this GameManager. */
     @Override
     public void close() {
         logger.debug("Closing GameManager resources");

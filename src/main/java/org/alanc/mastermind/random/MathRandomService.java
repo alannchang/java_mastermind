@@ -3,6 +3,10 @@ package org.alanc.mastermind.random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Local pseudo-random number generator using Math.random().
+ * Serves as a fallback when external random services are unavailable.
+ */
 public class MathRandomService implements RandomNumberService {
     private static final Logger logger = LoggerFactory.getLogger(MathRandomService.class);
 

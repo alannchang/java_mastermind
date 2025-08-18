@@ -2,6 +2,10 @@ package org.alanc.mastermind.util;
 
 import org.slf4j.Logger;
 
+/**
+ * Centralized error handling and message formatting utility.
+ * Provides consistent error messages and logging throughout the application.
+ */
 public final class ErrorHandler {
 
     public static String createMessage(String operation, String reason, String context, String userGuidance) {
