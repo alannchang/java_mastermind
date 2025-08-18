@@ -44,7 +44,7 @@
 
 ### 8/18
 - Combined logic and game directory
-- 
+- Added JavaDocs
 
 ### 8/19
 
@@ -72,23 +72,25 @@
 - [X] Parse API response into the secret combination
 
 ### Other
-- [X] Automated tests, unit tests, etc.   (IN PROGRESS)
+- [X] Tests using JUnit, etc.
 - [X] Logging using slf4j   (IN PROGRESS)
-- [X] Error & exception handling   (IN PROGRESS)
+- [X] Error & exception handling
 - [X] Input validation
 - [X] Proper resource management
+- [X] JavaDocs
 - [X] Follow SOLID principles
   - [X] Single Responsibility
   - [X] Open/Closed Principle
   - [X] Liskov Substitution Principle
   - [X] Interface Segregation Principle
   - [X] Dependency Inversion Principle
+ 
 
 ### Extensions/Extras (Optional)
 - [X] Add ability to check random.org api quota
+- [X] Add configurable difficulty (number range / attempts)
 - [ ] Add ability to load/save games, history, etc. (persistence using a database)
 - [ ] Add hint system
-- [X] Add configurable difficulty (number range / attempts)
 - [ ] Add multiplayer mode
 - [ ] Keep score across games
 - [ ] Add timers (per guess or per game)
