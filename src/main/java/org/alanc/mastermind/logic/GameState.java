@@ -7,7 +7,7 @@ import java.util.Collections;
 
 public final class GameState {
     private final String secretCode;
-    private final int[] playerGuess;
+    private final int[] secretCodeNumbers;
     private final List<GuessResult> guessHistory;
     private final int attemptsRemaining;
     private final int maxAttempts;
@@ -16,10 +16,10 @@ public final class GameState {
     private final boolean gameEnded;
     private final boolean playerWon;
 
-    private GameState(String secretCode, int[] playerGuess, List<GuessResult> guessHistory,int attemptsRemaining,
+    private GameState(String secretCode, int[] secretCodeNumbers, List<GuessResult> guessHistory,int attemptsRemaining,
                       int maxAttempts, int codeLength, int maxNumber, boolean gameEnded, boolean playerWon) {
         this.secretCode = secretCode;
-        this.playerGuess = playerGuess.clone();
+        this.secretCodeNumbers = secretCodeNumbers.clone();
         this.guessHistory = new ArrayList<>(guessHistory);
         this.attemptsRemaining = attemptsRemaining;
         this.maxAttempts = maxAttempts;
@@ -64,7 +64,7 @@ public final class GameState {
 
         return new GameState(
                 secretCode,
-                playerGuess,
+                secretCodeNumbers,
                 newHistory,
                 newAttemptsRemaining,
                 maxAttempts,
@@ -80,20 +80,20 @@ public final class GameState {
         int correctNumbers = 0;
 
         // Count exact matches
-        for (int i = 0; i < playerGuess.length; i++) {
-            if (playerGuess[i] == currentGuess[i]) {
+        for (int i = 0; i < secretCodeNumbers.length; i++) {
+            if (secretCodeNumbers[i] == currentGuess[i]) {
                 correctLocations++;
             }
         }
 
         // Count total correct numbers (including wrong positions)
-        correctNumbers = countTotalCorrectNumbers(playerGuess, currentGuess, correctLocations);
+        correctNumbers = countTotalCorrectNumbers(secretCodeNumbers, currentGuess, correctLocations);
 
         return new GuessResult(
                 GameInputValidator.intArrayToString(currentGuess),
                 correctNumbers,
                 correctLocations,
-                correctLocations == playerGuess.length
+                correctLocations == secretCodeNumbers.length
         );
     }
 
@@ -121,7 +121,7 @@ public final class GameState {
 
     // Getters
     public String getSecretCode() { return secretCode; }
-    public int[] getPlayerGuess() { return playerGuess.clone(); }
+    public int[] getSecretCodeNumbers() { return secretCodeNumbers.clone(); }
     public List<GuessResult> getGuessHistory() { return Collections.unmodifiableList(guessHistory); }
     public int getAttemptsRemaining() { return attemptsRemaining; }
     public int getAttemptsMade() { return maxAttempts - attemptsRemaining; }

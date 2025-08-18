@@ -45,8 +45,8 @@ public final class GameLogic {
         return currentState.withGuess(validationResult.getNumbers());
     }
 
-    public boolean isValidGuess(String playerGuess, GameConfig config) {
-        ValidationResult result = GameInputValidator.validateGuess(playerGuess, config.getCodeLength(), config.getMaxNumber());
+    public boolean isValidGuess(String playerGuess, GameState gameState) {
+        ValidationResult result = GameInputValidator.validateGuess(playerGuess, gameState.getCodeLength(), gameState.getMaxNumber());
         return result.isValid();
     }
 

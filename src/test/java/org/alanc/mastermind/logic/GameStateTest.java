@@ -28,7 +28,7 @@ class GameStateTest {
         void testCreateNewGameState() {
             assertNotNull(initialState);
             assertEquals("1 2 3 4", initialState.getSecretCode());
-            assertArrayEquals(new int[]{1, 2, 3, 4}, initialState.getPlayerGuess());
+            assertArrayEquals(new int[]{1, 2, 3, 4}, initialState.getSecretCodeNumbers());
             assertEquals(10, initialState.getAttemptsRemaining());
             assertEquals(0, initialState.getAttemptsMade());
             assertEquals(10, initialState.getMaxAttempts());
@@ -51,7 +51,7 @@ class GameStateTest {
             GameState customState = GameState.createNew("1 2 3 4 5 6", customConfig);
 
             assertEquals("1 2 3 4 5 6", customState.getSecretCode());
-            assertArrayEquals(new int[]{1, 2, 3, 4, 5, 6}, customState.getPlayerGuess());
+            assertArrayEquals(new int[]{1, 2, 3, 4, 5, 6}, customState.getSecretCodeNumbers());
             assertEquals(15, customState.getAttemptsRemaining());
             assertEquals(0, customState.getAttemptsMade());
             assertEquals(15, customState.getMaxAttempts());

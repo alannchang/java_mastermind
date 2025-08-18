@@ -168,21 +168,23 @@ class GameLogicTest {
         @Test
         @DisplayName("Should validate correct guess format")
         void testValidGuessFormat() {
-            assertTrue(gameLogic.isValidGuess("1 2 3 4", defaultConfig));
-            assertTrue(gameLogic.isValidGuess("0 7 0 7", defaultConfig));
-            assertTrue(gameLogic.isValidGuess("  1  2  3  4  ", defaultConfig));
+            GameState gameState = gameLogic.createNewGame(defaultConfig);
+            assertTrue(gameLogic.isValidGuess("1 2 3 4", gameState));
+            assertTrue(gameLogic.isValidGuess("0 7 0 7", gameState));
+            assertTrue(gameLogic.isValidGuess("  1  2  3  4  ", gameState));
         }
 
         @Test
         @DisplayName("Should reject invalid guess formats")
         void testInvalidGuessFormats() {
-            assertFalse(gameLogic.isValidGuess("1 2 3", defaultConfig)); // Too few
-            assertFalse(gameLogic.isValidGuess("1 2 3 4 5", defaultConfig)); // Too many
-            assertFalse(gameLogic.isValidGuess("1 a 3 4", defaultConfig)); // Non-numeric
-            assertFalse(gameLogic.isValidGuess("-1 2 3 4", defaultConfig)); // Negative
-            assertFalse(gameLogic.isValidGuess("1 2 3 9", defaultConfig)); // Out of range
-            assertFalse(gameLogic.isValidGuess("", defaultConfig)); // Empty
-            assertFalse(gameLogic.isValidGuess(null, defaultConfig)); // Null
+            GameState gameState = gameLogic.createNewGame(defaultConfig);
+            assertFalse(gameLogic.isValidGuess("1 2 3", gameState)); // Too few
+            assertFalse(gameLogic.isValidGuess("1 2 3 4 5", gameState)); // Too many
+            assertFalse(gameLogic.isValidGuess("1 a 3 4", gameState)); // Non-numeric
+            assertFalse(gameLogic.isValidGuess("-1 2 3 4", gameState)); // Negative
+            assertFalse(gameLogic.isValidGuess("1 2 3 9", gameState)); // Out of range
+            assertFalse(gameLogic.isValidGuess("", gameState)); // Empty
+            assertFalse(gameLogic.isValidGuess(null, gameState)); // Null
         }
 
         @Test
@@ -193,9 +195,10 @@ class GameLogicTest {
                     .maxNumber(5)
                     .build();
 
-            assertTrue(gameLogic.isValidGuess("0 3 5", customConfig));
-            assertFalse(gameLogic.isValidGuess("0 3 6", customConfig)); // 6 > maxNumber
-            assertFalse(gameLogic.isValidGuess("0 3", customConfig)); // Too short
+            GameState customGameState = gameLogic.createNewGame(customConfig);
+            assertTrue(gameLogic.isValidGuess("0 3 5", customGameState));
+            assertFalse(gameLogic.isValidGuess("0 3 6", customGameState)); // 6 > maxNumber
+            assertFalse(gameLogic.isValidGuess("0 3", customGameState)); // Too short
         }
     }
 

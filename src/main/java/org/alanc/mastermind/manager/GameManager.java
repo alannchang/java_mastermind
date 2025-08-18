@@ -62,6 +62,7 @@ public class GameManager implements AutoCloseable{
                 return;  // returns to main menu
             }
 
+            // Use the current configuration for replay
             initialState = gameLogic.createNewGame(currentConfig);
         }
     }
