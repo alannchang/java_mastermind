@@ -78,6 +78,18 @@ public final class GameText {
                 
                 ******************************************
                 """),
+        RESUME_GAME_MENU("""
+                ******************************************
+                
+                UNFINISHED GAME FOUND
+                
+                You have an incomplete game from a previous session.
+                
+                1) CONTINUE WHERE YOU LEFT OFF
+                2) START A NEW GAME
+                
+                ******************************************
+                """),
         ABOUT_INFO("""
                 ******************************************
                 

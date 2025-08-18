@@ -43,6 +43,26 @@ public class GameSession {
         }
     }
 
+    /**
+     * Resumes a game from an existing game state.
+     */
+    public void resumeGame(GameState resumedState, GameConfig config) {
+        logger.info("Resuming game with {} attempts remaining", resumedState.getAttemptsRemaining());
+        
+        while (true) {
+            GameState endState = playOneRound(resumedState);
+            
+            GameUI.showEndGameMessage(endState);
+            
+            if (!GameUI.showEndGameMenu(scanner)) {
+                return; // Exit to main menu
+            }
+            
+            // Start new round with same configuration
+            resumedState = gameLogic.createNewGame(config);
+        }
+    }
+
     private GameState playOneRound(GameState gameState) {
         GameUI.showWelcomeMessage(gameState.getMaxAttempts(), gameState.getCodeLength(), gameState.getMaxNumber());
 
