@@ -18,6 +18,9 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.9")
     implementation("ch.qos.logback:logback-classic:1.4.14")
 
+    // SQLite
+    implementation("org.xerial:sqlite-jdbc:3.44.1.0")
+
     // JUnit
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
