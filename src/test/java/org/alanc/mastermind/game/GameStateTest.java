@@ -1,4 +1,4 @@
-package org.alanc.mastermind.logic;
+package org.alanc.mastermind.game;
 
 import org.alanc.mastermind.config.GameConfig;
 import org.junit.jupiter.api.Test;

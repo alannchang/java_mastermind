@@ -1,4 +1,4 @@
-package org.alanc.mastermind.logic;
+package org.alanc.mastermind.game;
 
 public final class ValidationResult {
     private final boolean valid;

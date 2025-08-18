@@ -1,8 +1,8 @@
 package org.alanc.mastermind.game;
 
 import org.alanc.mastermind.config.GameConfig;
-import org.alanc.mastermind.logic.GameLogic;
-import org.alanc.mastermind.logic.GameState;
+import org.alanc.mastermind.game.GameLogic;
+import org.alanc.mastermind.game.GameState;
 import org.alanc.mastermind.ui.GameUI;
 import org.alanc.mastermind.util.ErrorHandler;
 import org.alanc.mastermind.util.GameTerminatedException;
@@ -11,9 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Scanner;
 
-/**
- * Handles a single game session with multiple rounds and replay logic
- */
 public class GameSession {
     private static final Logger logger = LoggerFactory.getLogger(GameSession.class);
     

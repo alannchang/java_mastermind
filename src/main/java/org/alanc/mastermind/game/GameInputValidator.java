@@ -1,4 +1,4 @@
-package org.alanc.mastermind.logic;
+package org.alanc.mastermind.game;
 
 public class GameInputValidator {
 

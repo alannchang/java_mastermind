@@ -2,7 +2,7 @@ package org.alanc.mastermind.manager;
 
 import org.alanc.mastermind.config.GameConfig;
 import org.alanc.mastermind.game.GameSession;
-import org.alanc.mastermind.logic.GameLogic;
+import org.alanc.mastermind.game.GameLogic;
 import org.alanc.mastermind.random.RandomNumberService;
 import org.alanc.mastermind.ui.GameUI;
 import org.alanc.mastermind.util.ErrorHandler;
@@ -10,10 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Scanner;
 
-/**
- * Manages application lifecycle and configuration
- * Delegates game session handling to GameSession
- */
 public class GameManager implements AutoCloseable {
     private static final Logger logger = LoggerFactory.getLogger(GameManager.class);
 

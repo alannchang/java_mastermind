@@ -1,6 +1,6 @@
 package org.alanc.mastermind.ui;
 
-import org.alanc.mastermind.logic.GameState;
+import org.alanc.mastermind.game.GameState;
 import org.alanc.mastermind.manager.GameManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -30,14 +30,21 @@
 - Added ErrorHandling for customizable error messages
 
 ### 8/16
-- Added proper resource management using try-with-resources 
+- Added proper resource management at application level using try-with-resources 
 - Application handles Ctrl+D
 - Added UI menus so players can customize their games, check quota, etc.
 - Added more tests
 
 ### 8/17
+- Added end game menu and option to play again or exit to main menu
+- GameConfig changed to pure builder pattern
+- Removed game session logic from GameManager and created GameSession
+- Added proper resource management for http client based services (RandomOrgService, QuotaChecker)
+- Cleaned up main() entrypoint by creating MastermindApplication class
 
 ### 8/18
+- Combined logic and game directory
+- 
 
 ### 8/19
 
@@ -70,6 +77,12 @@
 - [X] Error & exception handling   (IN PROGRESS)
 - [X] Input validation
 - [X] Proper resource management
+- [X] Follow SOLID principles
+  - [X] Single Responsibility
+  - [X] Open/Closed Principle
+  - [X] Liskov Substitution Principle
+  - [X] Interface Segregation Principle
+  - [X] Dependency Inversion Principle
 
 ### Extensions/Extras (Optional)
 - [X] Add ability to check random.org api quota
