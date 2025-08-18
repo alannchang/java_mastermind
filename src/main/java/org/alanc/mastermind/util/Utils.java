@@ -13,14 +13,12 @@ public class Utils {
             } else {
                 // Handle Ctrl+D (EOF)
                 System.out.println("\nInput stream closed. Game will exit now.");
-                System.exit(0);
-                return null; // This line will never be reached
+                throw new GameTerminatedException("Input stream closed");
             }
         } catch (NoSuchElementException e) {
             // Alternative handling for EOF
             System.out.println("\nInput stream closed. Game will exit now.");
-            System.exit(0);
-            return null; // This line will never be reached
+            throw new GameTerminatedException("Input stream closed");
         }
     }
 

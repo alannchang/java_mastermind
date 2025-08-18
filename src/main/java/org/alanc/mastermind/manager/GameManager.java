@@ -8,6 +8,7 @@ import org.alanc.mastermind.random.RandomOrgService;
 
 import org.alanc.mastermind.ui.GameUI;
 import org.alanc.mastermind.util.ErrorHandler;
+import org.alanc.mastermind.util.GameTerminatedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Scanner;
@@ -94,48 +95,33 @@ public class GameManager implements AutoCloseable{
     }
 
     private GameState playOneRound(GameState gameState) {
-        showWelcomeMessage(gameState.getMaxAttempts(), gameState.getCodeLength(), gameState.getMaxNumber());
+        GameUI.showWelcomeMessage(gameState.getMaxAttempts(), gameState.getCodeLength(), gameState.getMaxNumber());
 
         while(!gameState.isGameEnded()) {
-            String playerGuess = Utils.readLine(scanner, "What is the secret code? ");
-
+            String playerGuess = null;
             try {
+                playerGuess = Utils.readLine(scanner, "What is the secret code? ");
+
                 gameState = gameLogic.processGuess(gameState, playerGuess);
 
                 // Show feedback for the most recent guess
                 if (!gameState.getGuessHistory().isEmpty()) {
                     GameState.GuessResult latestGuess =
                             gameState.getGuessHistory().get(gameState.getGuessHistory().size() - 1);
-                    if (!latestGuess.allCorrect()) {
-                        System.out.println(latestGuess.provideFeedback());
-                        System.out.printf("Try Again. Attempts Remaining: %d\n", gameState.getAttemptsRemaining());
-                    }
+                    GameUI.showGuessResult(latestGuess, gameState.getAttemptsRemaining());
                 }
             } catch (IllegalArgumentException e) {
                 ErrorHandler.handleInputValidationError(logger, playerGuess, e.getMessage());
+            } catch (GameTerminatedException e) {
+                logger.info("Game terminated by user input: {}", e.getMessage());
+                throw e; // Re-throw to be handled at higher level
             }
         }
         return gameState;
     }
 
-    private void showWelcomeMessage(int maxAttempts, int codeLength, int maxNumber) {
-        System.out.println("WELCOME TO MASTERMIND!");
-        System.out.printf("You have %d chances to guess the secret code.", maxAttempts);
-        System.out.printf("The secret code consists of %d integers from %d to %d.\n",
-                codeLength, 0, maxNumber);
-        System.out.println("When entering your guess, please separate each integer with a single space.");
-    }
-
     private void showEndGameMessage(GameState gameState) {
-        printUI(Messages.SEPARATOR);
-
-        if (gameState.hasPlayerWon()) {
-            printUI(Messages.YOU_WIN_BANNER);
-            System.out.printf("You guessed it! The code is %s.\n", gameState.getSecretCode());
-        } else {
-            printUI(Messages.YOU_LOSE_BANNER);
-            System.out.printf("Sorry, the secret code was: %s.\n", gameState.getSecretCode());
-        }
+        GameUI.showEndGameMessage(gameState);
     }
 
     private boolean askToPlayAgain() {
