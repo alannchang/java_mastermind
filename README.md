@@ -1,7 +1,99 @@
 # Mastermind
 
-## Objective
-To implement a Mastermind game, where a user plays against the computer and tries to guess a number combination or "code". At the end of each attempt, the computer will tell the player how many numbers are correct numbers and how many numbers are in the correct position/location. Players are only allowed a fixed number of attempts to correctly guess the number combination.
+A console-based implementation of the classic Mastermind code-breaking game with database persistence, configurable difficulty, and Random.org API integration.
+
+## Quick Start
+
+```bash
+# Clone and run (requires Java 17+)
+git clone https://github.com/alannchang/java_mastermind
+cd java_mastermind
+./gradlew run
+
+# Or build and run manually
+./gradlew build
+java -jar build/libs/java_mastermind.jar
+```
+
+## Prerequisites
+
+Required:
+- Java 17 or higher (OpenJDK or Oracle JDK)
+- Internet connection (for Random.org API - has local fallback)
+
+Optional:
+- Git (for cloning repository)
+- IDE with Java support (IntelliJ IDEA, Eclipse, VS Code)
+
+Verification:
+```bash
+java --version    # Should show Java 17+
+./gradlew --version  # Gradle wrapper included
+```
+
+## Building and Running
+
+### Option 1: Direct Run (Recommended)
+```bash
+./gradlew run --console=plain
+```
+
+### Option 2: Build then Run
+```bash
+# Build the application
+./gradlew build
+
+# Run the JAR file
+java -jar build/libs/java_mastermind.jar
+```
+
+### Example Gameplay:
+```
+WELCOME TO MASTERMIND!
+You have 10 chances to guess the secret code.
+The secret code consists of 4 integers from 0 to 7.
+When entering your guess, please separate each integer with a single space.
+
+What is the secret code? 1 2 3 4
+1 correct number and 0 correct locations.
+Try Again. Attempts Remaining: 9
+```
+
+#### Main Menu Options:
+1) START NEW GAME
+2) OPTIONS
+3) ABOUT
+4) QUIT
+
+#### Options Menu:
+1) CHANGE NUMBER OF ATTEMPTS
+2) CHANGE SECRET CODE LENGTH
+3) CHANGE SECRET CODE NUMBER RANGE
+4) CHECK RANDOM.ORG API QUOTA
+5) RESET TO DEFAULT SETTINGS
+6) VIEW GAME HISTORY
+7) CLEAR GAME HISTORY
+8) RETURN TO MAIN MENU
+
+## Architecture Overview
+
+### Code Organization
+```
+src/main/java/org/alanc/mastermind/
+├── config/           # Game configuration (GameConfig)
+├── game/             # Core game logic (GameLogic, GameState, validation)
+├── manager/          # Application management (GameManager lifecycle)
+├── persistence/      # Database layer (SQLite DAO, converters)
+├── random/           # Number generation (Random.org + Math.random fallback)
+├── ui/               # User interface (menus, input/output handling)
+└── util/             # Shared utilities (error handling, I/O helpers)
+```
+
+### Key Design Patterns
+- **Builder Pattern**: Immutable GameConfig construction
+- **Dependency Injection**: Services injected into GameManager
+- **DAO Pattern**: Clean database access abstraction
+- **Strategy Pattern**: Dual random number generation with fallback
 
 ## Requirements Checklist
 
@@ -29,7 +121,7 @@ To implement a Mastermind game, where a user plays against the computer and trie
 
 ### Other
 - [X] Tests using JUnit, etc.
-- [X] Logging using slf4j   (IN PROGRESS)
+- [X] Logging using slf4j
 - [X] Error & exception handling
 - [X] Input validation
 - [X] Proper resource management
@@ -50,8 +142,25 @@ To implement a Mastermind game, where a user plays against the computer and trie
 - [ ] Keep score across games
 - [ ] Add timers (per guess or per game)
 
+## Creative Extensions
 
-## Journal
+### Database Persistence
+- SQLite database with auto-save on every guess
+- Resume interrupted games automatically
+- Complete game history with detailed guess records
+- View and clear history via options menu
+
+### Configurable Difficulty  
+- Adjustable attempts (1-100), code length (1-100), number range (1-100)
+- Settings persist between sessions
+- Input validation for all parameters
+
+### Dual Random Generation
+- Primary: Random.org API for true randomness
+- Fallback: Math.random() when API unavailable
+- Quota monitoring and graceful degradation
+
+## Development Journal
 
 ### 8/11
 - Created repo, added Gradle
@@ -99,8 +208,13 @@ To implement a Mastermind game, where a user plays against the computer and trie
 - Added support for viewing and deleting game state history
 - Game history includes full guess history including feedback
 - Added UI options/menus for resuming incomplete games, viewing and deleting history
+- Added more logging
+- Updated README.md
 
 ### 8/19
 
+## Future Extensions
 
+- Multiplayer mode using a game server that enables players to play against each other 
+- Play against computer mode, where players play against AI-powered opponents
 
