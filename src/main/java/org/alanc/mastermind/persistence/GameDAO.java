@@ -15,11 +15,17 @@ import java.util.Optional;
  */
 public class GameDAO implements AutoCloseable {
     private static final Logger logger = LoggerFactory.getLogger(GameDAO.class);
-    private static final String DB_URL = "jdbc:sqlite:mastermind_games.db";
+    private static final String DEFAULT_DB_URL = "jdbc:sqlite:mastermind_games.db";
     
     private Connection connection;
+    private final String dbUrl;
 
     public GameDAO() {
+        this(DEFAULT_DB_URL);
+    }
+
+    public GameDAO(String dbFileName) {
+        this.dbUrl = "jdbc:sqlite:" + dbFileName;
         try {
             initializeDatabase();
         } catch (SQLException e) {
@@ -29,7 +35,7 @@ public class GameDAO implements AutoCloseable {
     }
 
     private void initializeDatabase() throws SQLException {
-        connection = DriverManager.getConnection(DB_URL);
+        connection = DriverManager.getConnection(dbUrl);
         
         String createTableSQL = """
             CREATE TABLE IF NOT EXISTS games (
