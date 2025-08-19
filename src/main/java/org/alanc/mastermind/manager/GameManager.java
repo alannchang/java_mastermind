@@ -4,6 +4,7 @@ import org.alanc.mastermind.config.GameConfig;
 import org.alanc.mastermind.game.GameSession;
 import org.alanc.mastermind.game.GameLogic;
 import org.alanc.mastermind.persistence.GameDAO;
+import org.alanc.mastermind.persistence.GameConverter;
 import org.alanc.mastermind.persistence.GamePersistenceService;
 import org.alanc.mastermind.random.RandomNumberService;
 import org.alanc.mastermind.ui.GameUI;
@@ -11,6 +12,7 @@ import org.alanc.mastermind.ui.ResumeGameUI;
 import org.alanc.mastermind.util.ErrorHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 /**
@@ -105,38 +107,36 @@ public class GameManager implements AutoCloseable {
         logger.info("Starting new game session");
         
         // Check if there's an incomplete game
-        if (persistenceService.isLastGameIncomplete()) {
+        var gameResult = persistenceService.getLastIncompleteGame();
+        if (gameResult.isPresent()) {
             logger.debug("Found incomplete game, showing resume menu");
             
             if (ResumeGameUI.show(scanner)) {
-                resumeLastGame();
+                resumeIncompleteGame(gameResult.get());
                 return;
             } else {
-                // Mark the old game as abandoned
                 persistenceService.markLastGameAsAbandoned();
                 logger.info("User chose to abandon previous game and start fresh");
             }
         }
         
         // Start a new game
-        GameSession gameSession = new GameSession(gameLogic, scanner);
+        GameSession gameSession = new GameSession(gameLogic, scanner, persistenceService);
         gameSession.play(currentConfig);
     }
     
-    private void resumeLastGame() {
-        var gameResult = persistenceService.getLastIncompleteGame();
-        if (gameResult.isPresent()) {
-            logger.info("Resuming incomplete game");
-            System.out.println("Resuming your previous game...");
-            
-            // Use the game's original configuration
-            GameSession gameSession = new GameSession(gameLogic, scanner);
-            gameSession.resumeGame(gameResult.get().gameState(), gameResult.get().config());
-        } else {
-            logger.warn("No incomplete game found during resume attempt");
-            System.out.println("No incomplete game found. Starting a new game...");
-            startNewGame();
-        }
+    private void resumeIncompleteGame(GameConverter.GameStateResult gameResult) {
+        logger.info("Resuming incomplete game");
+        GameUI.showResumeGameMessage(gameResult.gameState().getAttemptsRemaining());
+        
+        // Use the game's original configuration
+        GameSession gameSession = new GameSession(gameLogic, scanner, persistenceService);
+        gameSession.resumeGame(
+            gameResult.gameState(), 
+            gameResult.config(), 
+            gameResult.gameId(), 
+            gameResult.startedAt()
+        );
     }
 
     /** Closes all resources managed by this GameManager. */

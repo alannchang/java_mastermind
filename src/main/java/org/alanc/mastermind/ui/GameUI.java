@@ -19,19 +19,37 @@ public class GameUI {
         return EndgameUI.show(scanner);
     }
 
-    public static void showWelcomeMessage(int maxAttempts, int codeLength, int maxNumber) {
+    /**
+     * Displays the welcome message with game configuration details.
+     * 
+     * @param attemptsRemaining the number of attempts remaining in the current game
+     * @param codeLength the length of the secret code
+     * @param maxNumber the maximum number value in the code
+     */
+    public static void showWelcomeMessage(int attemptsRemaining, int codeLength, int maxNumber) {
         System.out.println("WELCOME TO MASTERMIND!");
-        System.out.printf("You have %d chances to guess the secret code.", maxAttempts);
+        System.out.printf("You have %d chances to guess the secret code.\n", attemptsRemaining);
         System.out.printf("The secret code consists of %d integers from %d to %d.\n",
                 codeLength, 0, maxNumber);
         System.out.println("When entering your guess, please separate each integer with a single space.");
+        System.out.println();
     }
 
     public static void showGuessResult(GameState.GuessResult result, int attemptsRemaining) {
         if (!result.allCorrect()) {
             System.out.println(result.provideFeedback());
-            System.out.printf("Try Again. Attempts Remaining: %d\n", attemptsRemaining);
+            System.out.printf("Try Again. Attempts Remaining: %d\n\n", attemptsRemaining);
         }
+    }
+
+    /**
+     * Displays a message when resuming an incomplete game.
+     * 
+     * @param attemptsRemaining the number of attempts left in the resumed game
+     */
+    public static void showResumeGameMessage(int attemptsRemaining) {
+        System.out.println("Resuming your previous game...");
+        System.out.println();
     }
 
     public static void showEndGameMessage(GameState gameState) {

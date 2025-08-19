@@ -61,7 +61,7 @@ public class GameDAO implements AutoCloseable {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """;
         
-        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, record.getSecretCode());
             stmt.setInt(2, record.getMaxAttempts());
             stmt.setInt(3, record.getCodeLength());
@@ -73,9 +73,11 @@ public class GameDAO implements AutoCloseable {
             
             stmt.executeUpdate();
             
-            try (ResultSet keys = stmt.getGeneratedKeys()) {
-                if (keys.next()) {
-                    long id = keys.getLong(1);
+            // Get the generated ID using SQLite's last_insert_rowid()
+            try (PreparedStatement idStmt = connection.prepareStatement("SELECT last_insert_rowid()");
+                 ResultSet rs = idStmt.executeQuery()) {
+                if (rs.next()) {
+                    long id = rs.getLong(1);
                     logger.debug("Saved game record with ID: {}", id);
                     // Return new record with generated ID
                     return new GameRecord(id, record.getSecretCode(), record.getMaxAttempts(), 
@@ -83,11 +85,11 @@ public class GameDAO implements AutoCloseable {
                                         record.getStartedAt(), record.getCompletedAt(), record.getGuessesJson());
                 }
             }
+            throw new RuntimeException("Failed to retrieve generated ID for new game record");
         } catch (SQLException e) {
             logger.error("Failed to save game record", e);
             throw new RuntimeException("Failed to save game record", e);
         }
-        throw new RuntimeException("Failed to save game record - no ID generated");
     }
 
     /**

@@ -50,7 +50,6 @@ public class GameConverter {
             .build();
 
         // For resumed games, we need to reconstruct the game state
-        // This is a simplified approach - we'll create a new game and apply the guesses
         GameState baseState = GameState.createNew(record.getSecretCode(), config);
         
         // Apply each guess from the history to rebuild the state
@@ -69,7 +68,7 @@ public class GameConverter {
             }
         }
 
-        return new GameStateResult(currentState, config);
+        return new GameStateResult(currentState, config, record.getId(), record.getStartedAt());
     }
 
     private static String determineStatus(GameState gameState) {
@@ -102,9 +101,9 @@ public class GameConverter {
     }
 
     /**
-     * Simple record to return both GameState and GameConfig from conversion.
+     * Simple record to return GameState, GameConfig, gameId, and startedAt from conversion.
      */
-    public record GameStateResult(GameState gameState, GameConfig config) {}
+    public record GameStateResult(GameState gameState, GameConfig config, Long gameId, LocalDateTime startedAt) {}
 
     /**
      * Simple record to match the JSON structure of GuessResult.

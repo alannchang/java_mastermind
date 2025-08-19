@@ -3,12 +3,15 @@ package org.alanc.mastermind.game;
 import org.alanc.mastermind.config.GameConfig;
 import org.alanc.mastermind.game.GameLogic;
 import org.alanc.mastermind.game.GameState;
+import org.alanc.mastermind.persistence.GamePersistenceService;
+import org.alanc.mastermind.persistence.GameRecord;
 import org.alanc.mastermind.ui.GameUI;
 import org.alanc.mastermind.util.ErrorHandler;
 import org.alanc.mastermind.util.GameTerminatedException;
 import org.alanc.mastermind.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 /**
@@ -20,17 +23,25 @@ public class GameSession {
     
     private final GameLogic gameLogic;
     private final Scanner scanner;
+    private final GamePersistenceService persistenceService;
 
-    public GameSession(GameLogic gameLogic, Scanner scanner) {
+    public GameSession(GameLogic gameLogic, Scanner scanner, GamePersistenceService persistenceService) {
         this.gameLogic = gameLogic;
         this.scanner = scanner;
+        this.persistenceService = persistenceService;
     }
 
     public void play(GameConfig config) {
         GameState initialState = gameLogic.createNewGame(config);
+        LocalDateTime startTime = LocalDateTime.now();
+        GameRecord savedRecord = persistenceService.saveNewGame(initialState, startTime);
+        Long gameId = savedRecord.getId();
         
         while (true) {
-            GameState endState = playOneRound(initialState);
+            GameState endState = playOneRound(initialState, gameId, startTime);
+            
+            // Mark game as completed
+            persistenceService.updateGame(endState, gameId, startTime);
             
             GameUI.showEndGameMessage(endState);
             
@@ -40,17 +51,23 @@ public class GameSession {
             
             // Start new round with same configuration
             initialState = gameLogic.createNewGame(config);
+            startTime = LocalDateTime.now();
+            savedRecord = persistenceService.saveNewGame(initialState, startTime);
+            gameId = savedRecord.getId();
         }
     }
 
     /**
      * Resumes a game from an existing game state.
      */
-    public void resumeGame(GameState resumedState, GameConfig config) {
+    public void resumeGame(GameState resumedState, GameConfig config, Long gameId, LocalDateTime startTime) {
         logger.info("Resuming game with {} attempts remaining", resumedState.getAttemptsRemaining());
         
         while (true) {
-            GameState endState = playOneRound(resumedState);
+            GameState endState = playOneRound(resumedState, gameId, startTime);
+            
+            // Mark game as completed
+            persistenceService.updateGame(endState, gameId, startTime);
             
             GameUI.showEndGameMessage(endState);
             
@@ -60,17 +77,23 @@ public class GameSession {
             
             // Start new round with same configuration
             resumedState = gameLogic.createNewGame(config);
+            startTime = LocalDateTime.now();
+            GameRecord savedRecord = persistenceService.saveNewGame(resumedState, startTime);
+            gameId = savedRecord.getId();
         }
     }
 
-    private GameState playOneRound(GameState gameState) {
-        GameUI.showWelcomeMessage(gameState.getMaxAttempts(), gameState.getCodeLength(), gameState.getMaxNumber());
+    private GameState playOneRound(GameState gameState, Long gameId, LocalDateTime startTime) {
+        GameUI.showWelcomeMessage(gameState.getAttemptsRemaining(), gameState.getCodeLength(), gameState.getMaxNumber());
 
         while (!gameState.isGameEnded()) {
             String playerGuess = null;
             try {
                 playerGuess = Utils.readLine(scanner, "What is the secret code? ");
                 gameState = gameLogic.processGuess(gameState, playerGuess);
+
+                // Auto-save after each guess
+                persistenceService.updateGame(gameState, gameId, startTime);
 
                 // Show feedback for the most recent guess
                 if (!gameState.getGuessHistory().isEmpty()) {

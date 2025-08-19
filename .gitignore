@@ -1,3 +1,5 @@
+### SQLite Databases ###
+*.db
 
 ### Logs ###
 logs/
