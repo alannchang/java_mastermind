@@ -111,14 +111,14 @@ public class GameManager implements AutoCloseable {
         // Check if there's an incomplete game
         var gameResult = persistenceService.getLastIncompleteGame();
         if (gameResult.isPresent()) {
-            logger.debug("Found incomplete game, showing resume menu");
+            logger.debug("Found incomplete game ID: {}, showing resume menu", gameResult.get().gameId());
             
             if (ResumeGameUI.show(scanner)) {
                 resumeIncompleteGame(gameResult.get());
                 return;
             } else {
                 persistenceService.markLastGameAsAbandoned();
-                logger.info("User chose to abandon previous game and start fresh");
+                logger.info("User chose to abandon previous game ID: {} and start fresh", gameResult.get().gameId());
             }
         }
         
@@ -128,7 +128,8 @@ public class GameManager implements AutoCloseable {
     }
     
     private void resumeIncompleteGame(GameConverter.GameStateResult gameResult) {
-        logger.info("Resuming incomplete game");
+        logger.info("Resuming incomplete game ID: {} with {} attempts remaining", 
+                   gameResult.gameId(), gameResult.gameState().getAttemptsRemaining());
         GameUI.showResumeGameMessage(gameResult.gameState().getAttemptsRemaining());
         
         // Use the game's original configuration

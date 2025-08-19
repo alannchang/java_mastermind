@@ -36,12 +36,14 @@ public class GameSession {
         LocalDateTime startTime = LocalDateTime.now();
         GameRecord savedRecord = persistenceService.saveNewGame(initialState, startTime);
         Long gameId = savedRecord.getId();
+        logger.info("Started new game session with ID: {}", gameId);
         
         while (true) {
             GameState endState = playOneRound(initialState, gameId, startTime);
             
             // Mark game as completed
             persistenceService.updateGame(endState, gameId, startTime);
+            logger.info("Game {} completed with status: {}", gameId, endState.hasPlayerWon() ? "WON" : "LOST");
             
             GameUI.showEndGameMessage(endState);
             
@@ -94,6 +96,7 @@ public class GameSession {
 
                 // Auto-save after each guess
                 persistenceService.updateGame(gameState, gameId, startTime);
+                logger.debug("Auto-saved game {} after guess: {}", gameId, playerGuess);
 
                 // Show feedback for the most recent guess
                 if (!gameState.getGuessHistory().isEmpty()) {

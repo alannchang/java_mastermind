@@ -32,8 +32,10 @@ public class GameHistoryUI {
         List<GameRecord> games = gameManager.getAllGames();
         
         if (games.isEmpty()) {
+            logger.info("No games found in history database");
             System.out.println("No games found in history.");
         } else {
+            logger.info("Displaying {} games in history", games.size());
             System.out.println("GAME HISTORY");
             System.out.println("==============");
             System.out.println();

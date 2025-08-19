@@ -100,8 +100,9 @@ public class OptionsMenuUI {
         String confirmation = readLine(scanner, "Type 'yes' to confirm: ");
         
         if ("yes".equalsIgnoreCase(confirmation.trim())) {
+            int gameCount = gameManager.getAllGames().size();
             gameManager.clearGameHistory();
-            logger.info("User cleared all game history");
+            logger.info("User cleared all game history ({} games deleted)", gameCount);
             System.out.println("Game history cleared successfully!");
         } else {
             logger.info("User cancelled game history clearing");
