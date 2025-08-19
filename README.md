@@ -12,7 +12,7 @@ cd java_mastermind
 
 # Or build and run manually
 ./gradlew build
-java -jar build/libs/java_mastermind.jar
+java -jar build/libs/java_mastermind-1.0-SNAPSHOT.jar
 ```
 
 ## Prerequisites
@@ -44,7 +44,7 @@ java --version    # Should show Java 17+
 ./gradlew build
 
 # Run the JAR file
-java -jar build/libs/java_mastermind.jar
+java -jar build/libs/java_mastermind-1.0-SNAPSHOT.jar
 ```
 
 ### Example Gameplay:
@@ -59,7 +59,7 @@ What is the secret code? 1 2 3 4
 Try Again. Attempts Remaining: 9
 ```
 
-#### Main Menu Options:
+#### Menu Options:
 1) START NEW GAME
 2) OPTIONS
 3) ABOUT
@@ -83,17 +83,20 @@ src/main/java/org/alanc/mastermind/
 ├── config/           # Game configuration (GameConfig)
 ├── game/             # Core game logic (GameLogic, GameState, validation)
 ├── manager/          # Application management (GameManager lifecycle)
-├── persistence/      # Database layer (SQLite DAO, converters)
+├── persistence/      # Database layer (SQLite DAO, converters, records)
 ├── random/           # Number generation (Random.org + Math.random fallback)
-├── ui/               # User interface (menus, input/output handling)
+├── ui/               # User interface (menus, game history, resume functionality)
 └── util/             # Shared utilities (error handling, I/O helpers)
 ```
 
 ### Key Design Patterns
-- **Builder Pattern**: Immutable GameConfig construction
+- **Builder Pattern**: Immutable GameConfig construction with fluent API
+- **Strategy Pattern**: Dual random number generation with fallback  
+- **DAO Pattern**: Clean database access abstraction with SQLite
 - **Dependency Injection**: Services injected into GameManager
-- **DAO Pattern**: Clean database access abstraction
-- **Strategy Pattern**: Dual random number generation with fallback
+- **Immutable Objects**: GameState, GameConfig for thread safety
+- **Factory Methods**: ValidationResult, GameState creation
+- **Auto-Closeable**: Proper resource management throughout
 
 ## Requirements Checklist
 
@@ -146,8 +149,8 @@ src/main/java/org/alanc/mastermind/
 
 ### Database Persistence
 - SQLite database with auto-save on every guess
-- Resume interrupted games automatically
-- Complete game history with detailed guess records
+- Resume interrupted games automatically on startup
+- Complete game history with detailed guess records and timestamps
 - View and clear history via options menu
 
 ### Configurable Difficulty  
@@ -208,6 +211,9 @@ src/main/java/org/alanc/mastermind/
 - Added support for viewing and deleting game state history
 - Game history includes full guess history including feedback
 - Added UI options/menus for resuming incomplete games, viewing and deleting history
+- Added GameHistoryUI and ResumeGameUI components
+- Added GameConverter for domain-persistence mapping
+- Added proper JSON serialization of game data
 - Added more logging
 - Updated README.md
 

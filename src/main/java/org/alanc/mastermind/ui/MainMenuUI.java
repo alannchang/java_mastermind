@@ -17,7 +17,7 @@ public class MainMenuUI {
             printUI(Messages.MAIN_MENU);
 
             try {
-                int userSelection = readNumberInRange(scanner, "Please enter a number: ", 1, 5);
+                int userSelection = readNumberInRange(scanner, "Please enter a number: ", 1, 4);
                 logger.info("User selected main menu option: {}", userSelection);
 
                 printUI(GameText.Messages.SEPARATOR);
