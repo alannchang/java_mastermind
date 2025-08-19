@@ -85,6 +85,7 @@ public final class GameLogic {
 
         // Fallback to Math.random if injected service fails
         if (code == null) {
+            logger.warn("Random number service failed, falling back to MathRandomService");
             RandomNumberService fallbackService = new MathRandomService();
             code = fallbackService.generate(
                     config.getCodeLength(),
