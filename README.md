@@ -1,6 +1,6 @@
 # Mastermind
 
-A console-based implementation of the classic Mastermind code-breaking game with database persistence, configurable difficulty, and Random.org API integration.
+A CLI implementation in Java of the classic Mastermind code-breaking game with database persistence, configurable difficulty, and Random.org API integration.
 
 ## Quick Start
 
@@ -22,16 +22,18 @@ Required:
 - Internet connection (for Random.org API - has local fallback)
 
 Optional:
-- Git (for cloning repository)
+- Git
 - IDE with Java support (IntelliJ IDEA, Eclipse, VS Code)
 
-Verification:
-```bash
-java --version    # Should show Java 17+
-./gradlew --version  # Gradle wrapper included
-```
+## Project Dependencies
+- OkHttp
+  - MockWebServer (for testing) 
+- SLF4J
+- Jackson
+- JUnit
+- Mockito
 
-## Building and Running
+## Building/Running
 
 ### Option 1: Direct Run (Recommended)
 ```bash
@@ -58,6 +60,8 @@ What is the secret code? 1 2 3 4
 1 correct number and 0 correct locations.
 Try Again. Attempts Remaining: 9
 ```
+Press Ctrl+D at any time to exit the game/application.
+Unfinished games can be resumed through the ‘Start New Game’ option.”
 
 #### Menu Options:
 1) START NEW GAME
@@ -69,11 +73,15 @@ Try Again. Attempts Remaining: 9
 1) CHANGE NUMBER OF ATTEMPTS
 2) CHANGE SECRET CODE LENGTH
 3) CHANGE SECRET CODE NUMBER RANGE
-4) CHECK RANDOM.ORG API QUOTA
+4) CHECK RANDOM.ORG API QUOTA*
 5) RESET TO DEFAULT SETTINGS
 6) VIEW GAME HISTORY
 7) CLEAR GAME HISTORY
 8) RETURN TO MAIN MENU
+
+*This game integrates the Random.org API to generate true random numbers based on atmospheric noise, ensuring greater unpredictability than typical pseudo-random number generators.
+Random.org enforces usage limits through a quota system tied to the client’s IP address, which restricts the number of requests that can be made within a given period.
+For more information, please visit https://www.random.org/quota/
 
 ## Architecture Overview
 
@@ -150,12 +158,15 @@ src/main/java/org/alanc/mastermind/
 ### Database Persistence
 - SQLite database with auto-save on every guess
 - Resume interrupted games automatically on startup
-- Complete game history with detailed guess records and timestamps
+- Complete game history with detailed guess records, feedback, and timestamps
 - View and clear history via options menu
 
 ### Configurable Difficulty  
-- Adjustable attempts (1-100), code length (1-100), number range (1-100)
-- Settings persist between sessions
+- Adjustable game configurations
+  - Maximum attempts (1-100 attempts)
+  - Code length (1-100 numbers)
+  - Code number range (0 to (1-100))
+- Game configurations persist between sessions
 - Input validation for all parameters
 
 ### Dual Random Generation
@@ -218,9 +229,12 @@ src/main/java/org/alanc/mastermind/
 - Updated README.md
 
 ### 8/19
+- Fixed typo/bug in MainMenuUI
+- Updated README.md
 
 ## Future Extensions
 
 - Multiplayer mode using a game server that enables players to play against each other 
 - Play against computer mode, where players play against AI-powered opponents
+- Random difficulty mode
 
