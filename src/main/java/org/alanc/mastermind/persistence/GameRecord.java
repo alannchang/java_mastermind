@@ -18,6 +18,19 @@ public class GameRecord {
     private final LocalDateTime completedAt;
     private final String guessesJson; // JSON string of guess history
 
+    /**
+     * Creates a new game record.
+     * 
+     * @param id the unique game identifier
+     * @param secretCode the secret code for this game
+     * @param maxAttempts the maximum number of attempts allowed
+     * @param codeLength the length of the secret code
+     * @param maxNumber the maximum number value in the code
+     * @param status the current game status
+     * @param startedAt when the game was started
+     * @param completedAt when the game was completed (null if in progress)
+     * @param guessesJson JSON string containing the guess history
+     */
     public GameRecord(Long id, String secretCode, int maxAttempts, int codeLength, 
                      int maxNumber, String status, LocalDateTime startedAt, 
                      LocalDateTime completedAt, String guessesJson) {

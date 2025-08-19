@@ -97,7 +97,12 @@ public class GameHistoryUI {
     }
 
     /**
-     * Simple record to match the JSON structure of GuessResult.
+     * Record representing a single guess result for history display.
+     * 
+     * @param guess the player's guess as a string
+     * @param correctNumbers number of correct digits in wrong positions
+     * @param correctLocations number of correct digits in correct positions  
+     * @param allCorrect whether this guess was completely correct
      */
     public record GuessResult(String guess, int correctNumbers, int correctLocations, boolean allCorrect) {}
 

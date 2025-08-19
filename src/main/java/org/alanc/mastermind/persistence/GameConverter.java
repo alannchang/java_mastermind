@@ -101,12 +101,22 @@ public class GameConverter {
     }
 
     /**
-     * Simple record to return GameState, GameConfig, gameId, and startedAt from conversion.
+     * Result of converting a GameRecord back to game objects.
+     * 
+     * @param gameState the reconstructed game state
+     * @param config the game configuration
+     * @param gameId the unique game identifier
+     * @param startedAt when the game was originally started
      */
     public record GameStateResult(GameState gameState, GameConfig config, Long gameId, LocalDateTime startedAt) {}
 
     /**
-     * Simple record to match the JSON structure of GuessResult.
+     * Record for JSON serialization of guess results.
+     * 
+     * @param guess the player's guess as a string
+     * @param correctNumbers number of correct digits in wrong positions
+     * @param correctLocations number of correct digits in correct positions
+     * @param allCorrect whether this guess was completely correct
      */
     public record GuessResult(String guess, int correctNumbers, int correctLocations, boolean allCorrect) {}
 }
