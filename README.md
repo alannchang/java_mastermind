@@ -18,7 +18,8 @@ java -jar build/libs/java_mastermind-1.0-SNAPSHOT.jar
 ## Prerequisites
 
 Required:
-- Java 17 or higher (OpenJDK or Oracle JDK)
+- Java 21 or higher (Temurin 21 was used)
+- Gradle 8.13 or higher
 - Internet connection (for Random.org API - has local fallback)
 
 Optional:
