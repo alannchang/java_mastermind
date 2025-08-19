@@ -64,7 +64,9 @@ public final class GameText {
                 3) CHANGE SECRET CODE NUMBER RANGE
                 4) CHECK RANDOM.ORG API QUOTA
                 5) RESET TO DEFAULT SETTINGS
-                6) RETURN TO MAIN MENU
+                6) VIEW GAME HISTORY
+                7) CLEAR GAME HISTORY
+                8) RETURN TO MAIN MENU
                 
                 ******************************************
                 """),

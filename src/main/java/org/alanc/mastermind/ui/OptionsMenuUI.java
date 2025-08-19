@@ -18,7 +18,7 @@ public class OptionsMenuUI {
             printUI(Messages.OPTIONS_MENU);
 
             try {
-                int selection = readNumberInRange(scanner, "Please enter a number: ", 1, 7);
+                int selection = readNumberInRange(scanner, "Please enter a number: ", 1, 8);
                 logger.info("User selected options menu option: {}", selection);
 
                 switch (selection) {
@@ -31,6 +31,14 @@ public class OptionsMenuUI {
                     }
                     case 5 -> resetToDefaults(scanner, gameManager);
                     case 6 -> {
+                        logger.info("User requested game history view");
+                        GameHistoryUI.show(scanner, gameManager);
+                    }
+                    case 7 -> {
+                        logger.info("User requested to clear game history");
+                        clearGameHistory(scanner, gameManager);
+                    }
+                    case 8 -> {
                         logger.info("User exiting options menu");
                         return;
                     }
@@ -84,6 +92,22 @@ public class OptionsMenuUI {
         logger.info("User reset settings to defaults");
         System.out.println("Default settings restored!");
 
+        readLine(scanner, "Press Enter to return to Options menu\n");
+    }
+
+    private static void clearGameHistory(Scanner scanner, GameManager gameManager) {
+        System.out.println("Are you sure you want to clear all game history? This cannot be undone.");
+        String confirmation = readLine(scanner, "Type 'yes' to confirm: ");
+        
+        if ("yes".equalsIgnoreCase(confirmation.trim())) {
+            gameManager.clearGameHistory();
+            logger.info("User cleared all game history");
+            System.out.println("Game history cleared successfully!");
+        } else {
+            logger.info("User cancelled game history clearing");
+            System.out.println("Game history clearing cancelled.");
+        }
+        
         readLine(scanner, "Press Enter to return to Options menu\n");
     }
 

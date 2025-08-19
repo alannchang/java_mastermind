@@ -6,6 +6,7 @@ import org.alanc.mastermind.game.GameLogic;
 import org.alanc.mastermind.persistence.GameDAO;
 import org.alanc.mastermind.persistence.GameConverter;
 import org.alanc.mastermind.persistence.GamePersistenceService;
+import org.alanc.mastermind.persistence.GameRecord;
 import org.alanc.mastermind.random.RandomNumberService;
 import org.alanc.mastermind.ui.GameUI;
 import org.alanc.mastermind.ui.ResumeGameUI;
@@ -13,6 +14,7 @@ import org.alanc.mastermind.util.ErrorHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -137,6 +139,21 @@ public class GameManager implements AutoCloseable {
             gameResult.gameId(), 
             gameResult.startedAt()
         );
+    }
+
+    /**
+     * Gets all games from the database for history viewing.
+     * 
+     * @return list of all game records
+     */
+    public List<GameRecord> getAllGames() {
+        return persistenceService.getAllGames();
+    }
+
+    /** Clears all game history from the database. */
+    public void clearGameHistory() {
+        persistenceService.clearAllGames();
+        logger.info("All game history cleared");
     }
 
     /** Closes all resources managed by this GameManager. */
