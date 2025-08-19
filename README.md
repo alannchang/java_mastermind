@@ -45,8 +45,14 @@
 ### 8/18
 - Combined logic and game directory
 - Added JavaDocs
+- Added SQLite (jdbc) to store game state/data
+- Added support for auto-saving and loading incomplete games
+- Added support for viewing and deleting game state history
+- Game history includes full guess history including feedback
+- Added UI options/menus for resuming incomplete games, viewing and deleting history
 
 ### 8/19
+
 
 ## Checklist
 ### Core Game Requirements
@@ -89,7 +95,7 @@
 ### Extensions/Extras (Optional)
 - [X] Add ability to check random.org api quota
 - [X] Add configurable difficulty (number range / attempts)
-- [ ] Add ability to load/save games, history, etc. (persistence using a database)
+- [X] Add ability to load/save games, history, etc. (persistence using a database)
 - [ ] Add hint system
 - [ ] Add multiplayer mode
 - [ ] Keep score across games
